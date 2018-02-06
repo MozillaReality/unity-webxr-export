@@ -7,6 +7,9 @@ public class WebVRInput : MonoBehaviour {
 	private WebVRCamera webVRCamera = null;
 
 	void Awake() {
+		Rigidbody rigidBody = GetComponent<Rigidbody>();
+		rigidBody.isKinematic = true;
+
 		interaction = GetComponent<Interaction>();
 		webVRCamera = GetComponentInParent<WebVRCamera> ();
 	}
@@ -17,7 +20,7 @@ public class WebVRInput : MonoBehaviour {
 		}
 
 		if (webVRCamera.GetKeyUp(gameObject, 1)) {
-			interaction.Drop ();
+			interaction.Drop (webVRCamera);
 		}
 	}
 }

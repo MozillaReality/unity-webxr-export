@@ -33,9 +33,20 @@ public class Interaction : MonoBehaviour {
 		attachJoint.connectedBody = currentRigidBody;
 	}
 
-	public void Drop() {
+	public void Drop(WebVRCamera webVRCamera) {
 		if (!currentRigidBody)
 			return;
+		
+		var controller = webVRCamera.GetControllerHand (gameObject);
+		Vector3 angularVelocity = new Vector3 (controller.angularVelocity [0], controller.angularVelocity [1], controller.angularVelocity [2]);
+		Vector3 linearVelocity = new Vector3 (controller.linearVelocity [0], controller.linearVelocity [1], controller.linearVelocity [2]);
+
+		Vector3 av = webVRCamera.sitStand.MultiplyPoint(angularVelocity);
+//		Vector3 lv = webVRCamera.sitStand.MultiplyPoint(linearVelocity);
+
+		currentRigidBody.velocity = linearVelocity;
+		currentRigidBody.angularVelocity = av;
+
 		attachJoint.connectedBody = null;
 		currentRigidBody = null;
 	}

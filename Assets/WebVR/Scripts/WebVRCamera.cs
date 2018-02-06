@@ -38,7 +38,7 @@ public class WebVRCamera : MonoBehaviour
 
 	// sit stand room transform
 	//Matrix4x4 sitStand = Matrix4x4.Translate (new Vector3 (0, 1.2f, 0));
-	Matrix4x4 sitStand = Matrix4x4.identity;
+	public Matrix4x4 sitStand = Matrix4x4.identity;
 
     bool active = false; // vr mode
     
@@ -69,6 +69,8 @@ public class WebVRCamera : MonoBehaviour
 		public string hand;
 		public float[] orientation;
 		public float[] position;
+		public float[] linearVelocity;
+		public float[] angularVelocity;
 		public Button[] buttons;
 	}
 
@@ -151,7 +153,7 @@ public class WebVRCamera : MonoBehaviour
 	}
 
 	// returns controller object that matches the GameObject for given hand.
-	private Controller GetControllerHand(GameObject trackedObject) {
+	public Controller GetControllerHand(GameObject trackedObject) {
 		if (controllers == null)
 			return null;
 
