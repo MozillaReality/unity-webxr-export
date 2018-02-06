@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 public class WebVRCamera : MonoBehaviour
@@ -41,9 +42,11 @@ public class WebVRCamera : MonoBehaviour
 
     bool active = false; // vr mode
     
+	// controllers
+	private Dictionary<string, bool[]> buttonStates = new Dictionary<string, bool[]>();
+
 	public GameObject leftHandObj;
     public GameObject rightHandObj;
-
 
 	// delta time for latency checker.
 	float deltaTime = 0.0f;
@@ -141,15 +144,17 @@ public class WebVRCamera : MonoBehaviour
 					rhp = p;
 					rhr = r;
 				}
+
+				UpdateButtons (control);
 			}
 		}
 	}
 
-
-	private Hashtable buttonStates;
-
 	// returns controller object that matches the GameObject for given hand.
 	private Controller GetControllerHand(GameObject trackedObject) {
+		if (controllers == null)
+			return null;
+
 		string trackedObjectHand = trackedObject == leftHandObj ? "left" : "right";
 
 		foreach (Controller controller in controllers) {
@@ -164,26 +169,52 @@ public class WebVRCamera : MonoBehaviour
 		for (int i = 0; i < controller.buttons.Length; i++) {
 			Button button = controller.buttons [i];
 			string key = controller.hand + i + "pressed";
-			if (button.pressed) {
-				if (buttonStates.ContainsKey (key))
-					buttonStates [key] = button.pressed;
-				else
-					buttonStates.Add (key, button.pressed);
+
+			if (buttonStates.ContainsKey(key)) {
+				buttonStates [key] [1] = buttonStates [key][0];
+				buttonStates [key] [0] = button.pressed;
+			} else {
+				buttonStates.Add (key, new bool[]{button.pressed, false});
 			}
 		}
 	}
 
 	public bool GetKey(GameObject trackedObject, int buttonId) {
 		Controller controller = GetControllerHand (trackedObject);
+		if (controller == null)
+			return false;
 
-		return controller.buttons[buttonId].pressed;
+		string key = controller.hand + buttonId + "pressed";
+
+		bool buttonPressed = buttonStates [key] [0];
+
+		return buttonPressed;
 	}
 
 	public bool GetKeyDown(GameObject trackedObject, int buttonId) {
-		return false;
+		Controller controller = GetControllerHand (trackedObject);
+		if (controller == null)
+			return false;
+
+		string key = controller.hand + buttonId + "pressed";
+
+		bool buttonPressed = buttonStates [key] [0];
+		bool prevButtonPressed = buttonStates [key] [1];
+
+		return buttonPressed && prevButtonPressed != buttonPressed;
 	}
+
 	public bool GetKeyUp(GameObject trackedObject, int buttonId) {
-		return false;
+		Controller controller = GetControllerHand (trackedObject);
+		if (controller == null)
+			return false;
+
+		string key = controller.hand + buttonId + "pressed";
+
+		bool buttonPressed = buttonStates [key] [0];
+		bool prevButtonPressed = buttonStates [key] [1];
+
+		return !buttonPressed && prevButtonPressed != buttonPressed;
 	}
 
 	// received time tester from WebVR browser
