@@ -11,25 +11,24 @@ public class Interaction : MonoBehaviour {
 		attachJoint = GetComponent<FixedJoint> ();
 	}
 
-	void OnTriggerEnter(Collider collider) {
-		if (!collider.gameObject.CompareTag ("Interactable"))
+	void OnTriggerEnter(Collider other) {
+		if (!other.gameObject.CompareTag ("Interactable"))
 			return;
 
-		contactRigidBodies.Add (collider.gameObject.GetComponent<Rigidbody> ());
+		contactRigidBodies.Add (other.gameObject.GetComponent<Rigidbody> ());
 	}
 
-	void OnTriggerExit(Collider collider) {
-		if (!collider.gameObject.CompareTag ("Interactable"))
+	void OnTriggerExit(Collider other) {
+		if (!other.gameObject.CompareTag ("Interactable"))
 			return;
 
-		contactRigidBodies.Remove(collider.gameObject.GetComponent<Rigidbody> ());
+		contactRigidBodies.Remove(other.gameObject.GetComponent<Rigidbody> ());
 	}
 
 	public void Pickup() {
 		currentRigidBody = GetNearestRigidBody ();
 		if (!currentRigidBody)
 			return;
-		Debug.Log ("picking up");
 		currentRigidBody.transform.position = transform.position;
 		attachJoint.connectedBody = currentRigidBody;
 	}
@@ -37,7 +36,6 @@ public class Interaction : MonoBehaviour {
 	public void Drop() {
 		if (!currentRigidBody)
 			return;
-		Debug.Log ("dropping");
 		attachJoint.connectedBody = null;
 		currentRigidBody = null;
 	}
@@ -48,6 +46,7 @@ public class Interaction : MonoBehaviour {
 		float distance = 0.0f;
 
 		foreach (Rigidbody contactBody in contactRigidBodies) {
+			Debug.Log (contactBody.gameObject);
 			distance = (contactBody.gameObject.transform.position - transform.position).sqrMagnitude;
 
 			if (distance < minDistance) {
