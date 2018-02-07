@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 public class WebVRCamera : MonoBehaviour
@@ -27,6 +28,8 @@ public class WebVRCamera : MonoBehaviour
 	Quaternion lhr;
 	Quaternion rhr;
 
+	Controller[] controllers;
+
 	// camera view and projection matrices
 	Matrix4x4 clp = Matrix4x4.identity; // left projection matrix
 	Matrix4x4 clv = Matrix4x4.identity; // left view matrix
@@ -35,13 +38,15 @@ public class WebVRCamera : MonoBehaviour
 
 	// sit stand room transform
 	//Matrix4x4 sitStand = Matrix4x4.Translate (new Vector3 (0, 1.2f, 0));
-	Matrix4x4 sitStand = Matrix4x4.identity;
+	public Matrix4x4 sitStand = Matrix4x4.identity;
 
     bool active = false; // vr mode
     
+	// controllers
+	private Dictionary<string, bool[]> buttonStates = new Dictionary<string, bool[]>();
+
 	public GameObject leftHandObj;
     public GameObject rightHandObj;
-
 
 	// delta time for latency checker.
 	float deltaTime = 0.0f;
@@ -50,12 +55,23 @@ public class WebVRCamera : MonoBehaviour
 	bool showPerf = false;
 
 	[System.Serializable]
+	public class Button
+	{
+		public bool pressed;
+		public bool touched;
+		public float value;
+	}
+
+	[System.Serializable]
 	public class Controller
 	{
 		public int index;
 		public string hand;
 		public float[] orientation;
 		public float[] position;
+		public float[] linearVelocity;
+		public float[] angularVelocity;
+		public Button[] buttons;
 	}
 
 	[System.Serializable]
@@ -109,6 +125,7 @@ public class WebVRCamera : MonoBehaviour
 
 		// controllers
 		if (data.controllers.Length > 0) {
+			controllers = data.controllers;
 			foreach (Controller control in data.controllers) {
 				Vector3 position = new Vector3 (control.position [0], control.position [1], control.position [2]);
 				Quaternion rotation = new Quaternion (control.orientation [0], control.orientation [1], control.orientation [2], control.orientation [3]);
@@ -124,12 +141,82 @@ public class WebVRCamera : MonoBehaviour
 					lhp = p;
 					lhr = r;
 				}
+
 				if (control.hand == "right") {
 					rhp = p;
 					rhr = r;
 				}
+
+				UpdateButtons (control);
 			}
 		}
+	}
+
+	// returns controller object that matches the GameObject for given hand.
+	public Controller GetControllerHand(GameObject trackedObject) {
+		if (controllers == null)
+			return null;
+
+		string trackedObjectHand = trackedObject == leftHandObj ? "left" : "right";
+
+		foreach (Controller controller in controllers) {
+			if (controller.hand == trackedObjectHand)
+				return controller;
+		}
+		return null;
+	}
+
+	// updates button states hashtable
+	private void UpdateButtons(Controller controller) {
+		for (int i = 0; i < controller.buttons.Length; i++) {
+			Button button = controller.buttons [i];
+			string key = controller.hand + i + "pressed";
+
+			if (buttonStates.ContainsKey(key)) {
+				buttonStates [key] [1] = buttonStates [key][0];
+				buttonStates [key] [0] = button.pressed;
+			} else {
+				buttonStates.Add (key, new bool[]{button.pressed, false});
+			}
+		}
+	}
+
+	public bool GetKey(GameObject trackedObject, int buttonId) {
+		Controller controller = GetControllerHand (trackedObject);
+		if (controller == null)
+			return false;
+
+		string key = controller.hand + buttonId + "pressed";
+
+		bool buttonPressed = buttonStates [key] [0];
+
+		return buttonPressed;
+	}
+
+	public bool GetKeyDown(GameObject trackedObject, int buttonId) {
+		Controller controller = GetControllerHand (trackedObject);
+		if (controller == null)
+			return false;
+
+		string key = controller.hand + buttonId + "pressed";
+
+		bool buttonPressed = buttonStates [key] [0];
+		bool prevButtonPressed = buttonStates [key] [1];
+
+		return buttonPressed && prevButtonPressed != buttonPressed;
+	}
+
+	public bool GetKeyUp(GameObject trackedObject, int buttonId) {
+		Controller controller = GetControllerHand (trackedObject);
+		if (controller == null)
+			return false;
+
+		string key = controller.hand + buttonId + "pressed";
+
+		bool buttonPressed = buttonStates [key] [0];
+		bool prevButtonPressed = buttonStates [key] [1];
+
+		return !buttonPressed && prevButtonPressed != buttonPressed;
 	}
 
 	// received time tester from WebVR browser
