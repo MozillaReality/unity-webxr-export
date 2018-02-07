@@ -111,6 +111,7 @@
       // gamepads
       gamepads = navigator.getGamepads();
       vrGamepads = [];
+
       for (var i = 0; i < gamepads.length; ++i) {
         var gamepad = gamepads[i];
         if (gamepad && (gamepad.pose || gamepad.displayId)) {
@@ -118,16 +119,34 @@
             // flips gamepad axis to work with Unity.
             var position = gamepad.pose.position;
             position[2] *= -1;
+            var linearVelocity = gamepad.pose.linearVelocity;
+            linearVelocity[2] *= -1;
+            var angularVelocity = gamepad.pose.angularVelocity;
+            angularVelocity[2] *= -1;
             var orientation = gamepad.pose.orientation;
             orientation[0] *= -1;
             orientation[1] *= -1;
 
+            var buttons = [];
+            for (var j = 0; j < gamepad.buttons.length; j++) {
+              buttons.push({
+                pressed: gamepad.buttons[j].pressed,
+                touched: gamepad.buttons[j].touched,
+                value: gamepad.buttons[j].value
+              });
+            }
+
             vrGamepads.push({
               index: gamepad.index,
               hand: gamepad.hand,
+              buttons: buttons,
               orientation: Array.from(orientation),
-              position: Array.from(position)
+              position: Array.from(position),
+              linearVelocity: Array.from(linearVelocity),
+              angularVelocity: Array.from(angularVelocity)
             });
+
+            console.log(linearVelocity, angularVelocity);
           }
         }
       }
@@ -169,16 +188,14 @@
     }
   }
 
-  function onKeyDown (e) {
-    if (e.keyCode === 80) { // p, toggles perf counter
-      gameInstance.SendMessage('WebVRCameraSet', 'TogglePerf');
-    }
-    if(e.keyCode === 86) //v, tesets round-trip time between browser and Unity game instance.
-    {
-      console.log("pressed v, roundtrip time");
-      testTimeStart = performance.now();
-      gameInstance.SendMessage('WebVRCameraSet', 'TestTime');
-    }
+  function togglePerf() {
+    gameInstance.SendMessage('WebVRCameraSet', 'TogglePerf');
+  }
+
+  function testRoundtripTime() {
+    console.log("Testing roundtrip time...");
+    testTimeStart = performance.now();
+    gameInstance.SendMessage('WebVRCameraSet', 'TestTime');
   }
 
   function showInstruction(el) {
@@ -258,7 +275,6 @@
   window.addEventListener('vrdisplayactivate', onRequestPresent, false);
   window.addEventListener('vrdisplaydeactivate', onExitPresent, false);
   document.addEventListener('Unity', onUnity);
-  document.addEventListener('keydown', onKeyDown);
   entervrButton.addEventListener('click', onToggleVR, false);
   onResize();
   window.requestAnimationFrame(onAnimate);

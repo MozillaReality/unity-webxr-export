@@ -1,0 +1,15 @@
+{
+"companyName": "DefaultCompany",
+"productName": "Unity-WebVR-Export",
+"dataUrl": "Build3.data.unityweb",
+"wasmCodeUrl": "Build3.wasm.code.unityweb",
+"wasmFrameworkUrl": "Build3.wasm.framework.unityweb",
+"asmCodeUrl": "Build3.asm.code.unityweb",
+"asmMemoryUrl": "Build3.asm.memory.unityweb",
+"asmFrameworkUrl": "Build3.asm.framework.unityweb",
+"TOTAL_MEMORY": 536870912,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}
