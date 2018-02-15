@@ -20,12 +20,29 @@
   var gamepads = [];
   var vrGamepads = [];
 
+  if ('serviceWorker' in navigator && 'isSecureContext' in window && !window.isSecureContext) {
+    console.warn('The site is insecure; Service Workers will not work and the site will not be recognized as a PWA');
+  } else if ('serviceWorker' in navigator) {
+    if (navigator.serviceWorker.controller) {
+      console.log('Running active Service Worker (controller: %s)', navigator.serviceWorker.controller.scriptURL);
+    } else {
+      navigator.serviceWorker.register('/sw.js').then(function (registration) {
+        console.log('Successfully registered Service Worker (scope: %s)', registration.scope);
+      }, function (err) {
+        console.warn('Failed to register Service Worker:\n', err);
+      });
+    }
+  }
+  
+  function onUnityLoaded() {
+    canvas = document.getElementById('#canvas');
+    document.body.dataset.unityLoaded = 'true';
+    onResize();
+  }
+
   function onUnity(msg) {
     if (msg.detail === "Ready") {
       // Get and hide Unity's canvas instance
-      canvas = document.getElementById('#canvas');
-      document.body.dataset.unityLoaded = 'true';
-      onResize();
       getVRDisplays();
     }
 
@@ -274,6 +291,7 @@
   window.addEventListener('vrdisplaypresentchange', onResize, false);
   window.addEventListener('vrdisplayactivate', onRequestPresent, false);
   window.addEventListener('vrdisplaydeactivate', onExitPresent, false);
+  document.addEventListener('UnityLoaded', onUnityLoaded, false);
   document.addEventListener('Unity', onUnity);
   entervrButton.addEventListener('click', onToggleVR, false);
   onResize();

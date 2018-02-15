@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unity-WebVR-Export</title>
-    <meta name="description" content="Unity-WebVR-Export">
+    <title> | Unity-WebVR-Export</title>
+    <meta name="description" content="">
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" type="text/css" href="webvr.css">
     <script src="Build/UnityLoader.js"></script>
@@ -12,7 +12,7 @@
       /* global UnityLoader */
       (function () {
         UnityLoader.SystemInfo.mobile = false;  // Workaround to force `UnityLoader` to actually load on mobile.
-        window.gameInstance = UnityLoader.instantiate('gameContainer', 'Build/Build3.json', {
+        window.gameInstance = UnityLoader.instantiate('gameContainer', 'Build/Build.json', {
           Module: {
             // `preserveDrawingBuffer` is needed for WebVR content to be mirrored to the `<canvas>`.
             webglContextAttributes: {
@@ -30,7 +30,7 @@
           }
           gameInstance.progress.style.width = (100 * progress) + '%';
           if (progress === 1) {
-            gameInstance.loader.style.display = 'none';
+            document.dispatchEvent(new CustomEvent('UnityLoaded'));
           }
         }
       })();
