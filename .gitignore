@@ -31,3 +31,23 @@ sysinfo.txt
 
 # Visual Studio Code settings
 .vscode/*
+Build/Build/Build/Build.asm.code.unityweb
+Build/Build/Build/Build.asm.framework.unityweb
+Build/Build/Build/Build.asm.memory.unityweb
+Build/Build/Build/Build.data.unityweb
+Build/Build/Build/Build.json
+Build/Build/Build/Build.wasm.code.unityweb
+Build/Build/Build/Build.wasm.framework.unityweb
+Build/Build/Build/UnityLoader.js
+Build/Build/favicon.ico
+Build/Build/gl-matrix-min.js
+Build/Build/index.html
+Build/Build/manifest.webmanifest
+Build/Build/motion-controllers.png
+Build/Build/mousedrag.png
+Build/Build/sw.js
+Build/Build/webvr-polyfill.min.js
+Build/Build/webvr-polyfill.min.js.map
+Build/Build/webvr.css
+Build/Build/webvr.js
+Build/Build/vr.png
