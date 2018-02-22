@@ -10,6 +10,7 @@ ModelImporter:
     400000: OrganPipeCactus_Mesh
     400002: //RootNode
     2100000: OrganPipeCactus_Mat
+    2100002: OrganPipeCactus_MeshMat
     2300000: OrganPipeCactus_Mesh
     3300000: OrganPipeCactus_Mesh
     4300000: OrganPipeCactus_Mesh
@@ -51,7 +52,7 @@ ModelImporter:
     importCameras: 1
     importLights: 1
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
