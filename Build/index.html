@@ -11,6 +11,20 @@
     <meta name="description" content="">
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" type="text/css" href="webvr.css">
+    <script>
+      // Telemetry for collecting basic usage statistics, performance metrics, and catching errors.
+      (function () {
+        if (!navigator.onLine) {
+          return;
+        }
+        var ref = document.querySelector('script');
+        var script = document.createElement('script');
+        script.src = 'https://webxr.services/telemetry.js';
+        script.crossorigin = 'anonymous';
+        script.async = true;
+        (ref ? ref.parentNode : document.head).insertBefore(script, ref);
+      })();
+    </script>
     <script src="Build/UnityLoader.js"></script>
     <script>
       /* global UnityLoader */
