@@ -28,6 +28,13 @@ telemetry.ga = {
   }
 };
 
+var NO_OP = function () {};
+
+telemetry.performance = {
+  mark: NO_OP,
+  measure: NO_OP
+};
+
 telemetry.start = function (config) {
   config = config || {};
   if (navigator.doNotTrack === '1') {
@@ -37,7 +44,10 @@ telemetry.start = function (config) {
     startErrorLogging();
   }
   if (config.analytics) {
-    startAnalytics();
+    var researchAnalytics = startAnalytics();
+    if (config.performance) {
+      configurePerformanceAPI(researchAnalytics);
+    }
   }
 };
 
@@ -85,6 +95,25 @@ function startAnalytics() {
   var ga = telemetry.ga.create('UA-77033033-6', 'auto', 'mozillaResearch');
   ga('set', 'dimension1', CURRENT_VERSION);
   ga('send', 'pageview');
+  return ga;
+}
+
+function configurePerformanceAPI(ga) {
+  telemetry.performance = {
+    mark: function (name) {
+      performance.mark(name);
+    },
+  
+    measure: function (name, start, end) {
+      if (navigator.doNotTrack === '1') {
+        return;
+      }
+      performance.measure(name, start, end);
+      var performanceEntry = performance.getEntriesByName(name)[0];
+      var duration = performanceEntry.duration;
+      ga('send', 'event', 'Performance', name, undefined, duration);
+    }
+  };
 }
 
 function injectScript (src, callback) {
