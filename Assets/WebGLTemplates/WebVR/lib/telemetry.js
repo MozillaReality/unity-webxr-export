@@ -67,7 +67,13 @@ function setupAnalytics() {
       console.warn('Could not load Analytics.js script:', err);
       return;
     }
-  });  
+    injectScript('https://vr.mozilla.org/static/js/autotrack.js', function (err) {
+      if (err) {
+        console.warn('Could not load autotrack.js (GA plugins) script:', err);
+        return;
+      }
+    });
+  });
 }
 
 function startErrorLogging() {
@@ -93,8 +99,24 @@ function startErrorLogging() {
 function startAnalytics() {
   var CURRENT_VERSION = '1.0.1';
   var ga = telemetry.ga.create('UA-77033033-6', 'auto', 'mozillaResearch');
+
+  // Docs for GA plugins: https://github.com/googleanalytics/autotrack/blob/master/docs/plugins/
+
+  // Ensures consistency in the URL paths that get reported to Google Analytics; avoiding the problem where separate rows in your pages reports actually point to the same page.
+  ga('require', 'cleanUrlTracker');
+
+  // Enables tracking media-query matching and media-query changes.
+  ga('require', 'mediaQueryTracker');
+
+  // Automatically tracks link clicks to external domains.
+  ga('require', 'outboundLinkTracker');
+
+  // Automatically tracks how long pages are in the visible state (as opposed to in a background tab).
+  ga('require', 'pageVisibilityTracker');
+
   ga('set', 'dimension1', CURRENT_VERSION);
   ga('send', 'pageview');
+
   return ga;
 }
 
@@ -103,7 +125,7 @@ function configurePerformanceAPI(ga) {
     mark: function (name) {
       performance.mark(name);
     },
-  
+
     measure: function (name, start, end) {
       if (navigator.doNotTrack === '1') {
         return;
