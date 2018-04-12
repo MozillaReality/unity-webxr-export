@@ -29,7 +29,6 @@ var endsWith = function (str, suffix) {
 // Check if the origin looks like a production, non-development host (i.e., public and served over HTTPS).
 // Relevant reading: https://w3c.github.io/webappsec-secure-contexts/#localhost
 var isSecureOrigin = function (win) {
-  return true;
   return !(
     win.isSecureContext === false ||
     win.location.protocol === 'http:' ||
