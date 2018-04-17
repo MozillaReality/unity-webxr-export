@@ -80,29 +80,31 @@
     }
   }
 
-  function onToggleVR() {
+  function onToggleVR () {
     if (vrDisplay && vrDisplay.isPresenting) {
       console.log('Toggled to exit VR mode');
-      onExitPresent();
+      return onExitPresent();
     } else {
       console.log('Toggled to enter VR mode');
-      onRequestPresent();
+      return onRequestPresent();
     }
   }
 
-  function onRequestPresent() {
-    if (!vrDisplay) {
-      throw new Error('No VR display available to enter VR mode');
-    }
-    if (!vrDisplay.capabilities || !vrDisplay.capabilities.canPresent) {
-      throw new Error('VR display is not capable of presenting');
-    }
-    return vrDisplay.requestPresent([{source: canvas}]).then(function () {
-      // Start stereo rendering in Unity.
-      console.log('Entered VR mode');
-      gameInstance.SendMessage('WebVRCameraSet', 'OnStartVR');
-    }).catch(function (err) {
-      console.error('Unable to enter VR mode:', err);
+  function onRequestPresent () {
+    return new Promise(function (resolve, reject) {
+      if (!vrDisplay) {
+        throw new Error('No VR display available to enter VR mode');
+      }
+      if (!vrDisplay.capabilities || !vrDisplay.capabilities.canPresent) {
+        throw new Error('VR display is not capable of presenting');
+      }
+      return vrDisplay.requestPresent([{source: canvas}]).then(function () {
+        // Start stereo rendering in Unity.
+        console.log('Entered VR mode');
+        gameInstance.SendMessage('WebVRCameraSet', 'OnStartVR');
+      }).catch(function (err) {
+        console.error('Unable to enter VR mode:', err);
+      });
     });
   }
 
@@ -356,13 +358,25 @@
     }
   }
 
+  function onPresentChange () {
+    return onResize();
+  }
+
+  function onActivate () {
+    return onRequestPresent();
+  }
+
+  function onDeactivate () {
+    return onExitPresent();
+  }
+
   // Monkeypatch `rAF` so that we can render at the VR display's framerate.
   window.requestAnimationFrame = onRequestAnimationFrame;
 
   window.addEventListener('resize', onResize, true);
-  window.addEventListener('vrdisplaypresentchange', onResize, false);
-  window.addEventListener('vrdisplayactivate', onRequestPresent, false);
-  window.addEventListener('vrdisplaydeactivate', onExitPresent, false);
+  window.addEventListener('vrdisplaypresentchange', onPresentChange, false);
+  window.addEventListener('vrdisplayactivate', onActivate, false);
+  window.addEventListener('vrdisplaydeactivate', onDeactivate, false);
   window.addEventListener('keyup', onKeyUp, false);
   document.addEventListener('UnityLoaded', onUnityLoaded, false);
   document.addEventListener('Unity', onUnity);
