@@ -207,8 +207,8 @@ public class WebVRController : MonoBehaviour
                 position = this.sitStand.MultiplyPoint(position);
             }
 
-            transform.rotation = rotation;
-            transform.position = position;
+            transform.localRotation = rotation;
+            transform.localPosition = position;
 
             UpdateButtons(buttonValues);
             this.axes = axesValues;
@@ -277,17 +277,17 @@ public class WebVRController : MonoBehaviour
 
             if (this.simulate3dof)
             {
-                transform.position = this.applyArmModel(
+                transform.localPosition = this.applyArmModel(
                     InputTracking.GetLocalPosition(XRNode.Head), // we use head position as origin
                     InputTracking.GetLocalRotation(handNode),
                     InputTracking.GetLocalRotation(XRNode.Head)
                 );
-                transform.rotation = InputTracking.GetLocalRotation(handNode);
+                transform.localRotation = InputTracking.GetLocalRotation(handNode);
             }
             else
             {
-                transform.position = InputTracking.GetLocalPosition(handNode);
-                transform.rotation = InputTracking.GetLocalRotation(handNode);
+                transform.localPosition = InputTracking.GetLocalPosition(handNode);
+                transform.localRotation = InputTracking.GetLocalRotation(handNode);
             }
 
             foreach(WebVRControllerInput input in inputMap.inputs)
