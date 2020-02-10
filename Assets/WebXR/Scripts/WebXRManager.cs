@@ -6,14 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-[Obsolete("Use WebXRState")]
-public enum WebVRState { ENABLED, NORMAL }
+public enum WebXRState { ENABLED, NORMAL }
 
-[Obsolete("Use WebXRManager")]
-public class WebVRManager : MonoBehaviour
+public class WebXRManager : MonoBehaviour
 {
-    [Tooltip("Name of the key used to alternate between VR and normal mode. Leave blank to disable.")]
-    public string toggleVRKeyName;
+    [Tooltip("Name of the key used to alternate between XR and normal mode. Leave blank to disable.")]
+    public string toggleXRKeyName;
     [Tooltip("Preserve the manager across scenes changes.")]
     public bool dontDestroyOnLoad = true;
     [Header("Tracking")]
@@ -22,16 +20,16 @@ public class WebVRManager : MonoBehaviour
     [Tooltip("Represents the size of physical space available for XR.")]
     public TrackingSpaceType TrackingSpace = TrackingSpaceType.RoomScale;
 
-    private static string GlobalName = "WebVRCameraSet";
-    private static WebVRManager instance;
+    private static string GlobalName = "WebXRCameraSet";
+    private static WebXRManager instance;
     [HideInInspector]
-    public WebVRState vrState = WebVRState.NORMAL;
+    public WebXRState xrState = WebXRState.NORMAL;
 
-    public delegate void VRCapabilitiesUpdate(WebVRDisplayCapabilities capabilities);
-    public event VRCapabilitiesUpdate OnVRCapabilitiesUpdate;
+    public delegate void XRCapabilitiesUpdate(WebXRDisplayCapabilities capabilities);
+    public event XRCapabilitiesUpdate OnXRCapabilitiesUpdate;
 
-    public delegate void VRChange(WebVRState state);
-    public event VRChange OnVRChange;
+    public delegate void XRChange(WebXRState state);
+    public event XRChange OnXRChange;
     
     public delegate void HeadsetUpdate(
         Matrix4x4 leftProjectionMatrix,
@@ -50,32 +48,32 @@ public class WebVRManager : MonoBehaviour
         Vector3 position,
         Vector3 linearAcceleration,
         Vector3 linearVelocity,
-        WebVRControllerButton[] buttons,
+        WebXRControllerButton[] buttons,
         float[] axes);
     public event ControllerUpdate OnControllerUpdate;
 
     // link WebGL plugin for interacting with browser scripts.
     [DllImport("__Internal")]
-    private static extern void ConfigureToggleVRKeyName(string keyName);
+    private static extern void ConfigureToggleXRKeyName(string keyName);
 
     [DllImport("__Internal")]
-    private static extern void InitSharedArray(float[] array, int length);
+    private static extern void XRInitSharedArray(float[] array, int length);
 
     [DllImport("__Internal")]
-    private static extern void ListenWebVRData();
+    private static extern void ListenWebXRData();
 
-    // Shared array which we will load headset data in from webvr.jslib
+    // Shared array which we will load headset data in from webxr.jslib
     // Array stores  5 matrices, each 16 values, stored linearly.
     float[] sharedArray = new float[5 * 16];
 
-    private WebVRDisplayCapabilities capabilities;
+    private WebXRDisplayCapabilities capabilities;
 
-    public static WebVRManager Instance {
+    public static WebXRManager Instance {
         get
         {
-            if (instance == null)
+            if (!instance)
             {
-                var managerInScene = FindObjectOfType<WebVRManager>();
+                var managerInScene = FindObjectOfType<WebXRManager>();
                 var name = GlobalName;
 
                 if (managerInScene != null)
@@ -86,7 +84,7 @@ public class WebVRManager : MonoBehaviour
                 else
                 {
                     GameObject go = new GameObject(name);
-                    go.AddComponent<WebVRManager>();
+                    go.AddComponent<WebXRManager>();
                 }
             }
             return instance;
@@ -98,12 +96,12 @@ public class WebVRManager : MonoBehaviour
         Debug.Log("Active Graphics Tier: " + Graphics.activeTier);
         instance = this;
         
-        if(!GlobalName.Equals(instance.name)) {
-           Debug.LogError("The webvr.js script requires the WebVRManager gameobject to be named " 
+        if(!GlobalName.Equals(name)) {
+           Debug.LogError("The webxr.js script requires the WebXRManager gameobject to be named " 
            + GlobalName + " for proper functioning");
         }
                 
-        if (instance.dontDestroyOnLoad)
+        if (dontDestroyOnLoad)
         {
             DontDestroyOnLoad(instance);
         }
@@ -113,20 +111,20 @@ public class WebVRManager : MonoBehaviour
     {
         if (XRDevice.isPresent)
         {
-            XRDevice.SetTrackingSpaceType(WebVRManager.Instance.TrackingSpace);
+            XRDevice.SetTrackingSpaceType(TrackingSpace);
             Debug.Log("Tracking Space: " + XRDevice.GetTrackingSpaceType());
         }
     }
 
-    // Handles WebVR data from browser
-    public void OnWebVRData (string jsonString)
+    // Handles WebXR data from browser
+    public void OnWebXRData (string jsonString)
     {
-        WebVRData webVRData = WebVRData.CreateFromJSON (jsonString);
+        WebXRData webXRData = WebXRData.CreateFromJSON (jsonString);
 
         // Update controllers
-        if (webVRData.controllers.Length > 0)
+        if (webXRData.controllers.Length > 0)
         {
-            foreach (WebVRControllerData controllerData in webVRData.controllers)
+            foreach (WebXRControllerData controllerData in webXRData.controllers)
             {
                 if (OnControllerUpdate != null)
                     OnControllerUpdate(controllerData.id,
@@ -144,50 +142,51 @@ public class WebVRManager : MonoBehaviour
         }
     }
 
-    // Handles WebVR capabilities from browser
-    public void OnVRCapabilities(string json) {
-        WebVRDisplayCapabilities capabilities = JsonUtility.FromJson<WebVRDisplayCapabilities>(json);
-        OnVRCapabilities(capabilities);
+    // Handles WebXR capabilities from browser
+    public void OnXRCapabilities(string json) {
+        WebXRDisplayCapabilities capabilities = JsonUtility.FromJson<WebXRDisplayCapabilities>(json);
+        OnXRCapabilities(capabilities);
     }
 
-    public void OnVRCapabilities(WebVRDisplayCapabilities capabilities) {
+    public void OnXRCapabilities(WebXRDisplayCapabilities capabilities) {
         #if !UNITY_EDITOR && UNITY_WEBGL
         this.capabilities = capabilities;
         if (!capabilities.canPresent)
             WebVRUI.displayElementId("novr");
         #endif
 
-        if (OnVRCapabilitiesUpdate != null)
-            OnVRCapabilitiesUpdate(capabilities);
+        if (OnXRCapabilitiesUpdate != null)
+            OnXRCapabilitiesUpdate(capabilities);
     }
 
-    public void toggleVrState()
+    public void toggleXrState()
     {
         #if !UNITY_EDITOR && UNITY_WEBGL
-        if (this.vrState == WebVRState.ENABLED)
-            setVrState(WebVRState.NORMAL);
+        if (this.xrState == WebXRState.ENABLED)
+            setXrState(WebXRState.NORMAL);
         else
-            setVrState(WebVRState.ENABLED);
+            setXrState(WebXRState.ENABLED);
         #endif
     }
 
-    public void setVrState(WebVRState state)
+    public void setXrState(WebXRState state)
     {
-        this.vrState = state;
-        if (OnVRChange != null)
-            OnVRChange(state);
+        xrState = state;
+        
+        if (OnXRChange != null)
+            OnXRChange(state);
     }
 
-    // received start VR from WebVR browser
-    public void OnStartVR()
+    // received start VR from WebXR browser
+    public void OnStartXR()
     {
-        Instance.setVrState(WebVRState.ENABLED);        
+        Instance.setXrState(WebXRState.ENABLED);        
     }
 
     // receive end VR from WebVR browser
-    public void OnEndVR()
+    public void OnEndXR()
     {
-        Instance.setVrState(WebVRState.NORMAL);
+        Instance.setXrState(WebXRState.NORMAL);
     }
 
     float[] GetFromSharedArray(int index)
@@ -202,9 +201,9 @@ public class WebVRManager : MonoBehaviour
     void Start()
     {
         #if !UNITY_EDITOR && UNITY_WEBGL
-        ConfigureToggleVRKeyName(toggleVRKeyName);
-        InitSharedArray(sharedArray, sharedArray.Length);
-        ListenWebVRData();
+        ConfigureToggleXRKeyName(toggleXRKeyName);
+        XRInitSharedArray(sharedArray, sharedArray.Length);
+        ListenWebXRData();
         #endif
         SetTrackingSpaceType();
     }
@@ -212,31 +211,32 @@ public class WebVRManager : MonoBehaviour
     void Update()
     {
         #if UNITY_EDITOR || !UNITY_WEBGL
-        bool quickToggleEnabled = toggleVRKeyName != null && toggleVRKeyName != "";
-        if (quickToggleEnabled && Input.GetKeyUp(toggleVRKeyName))
-            toggleVrState();
+        if (string.IsNullOrEmpty(toggleXRKeyName))
+            return;
+        if (Input.GetKeyUp(toggleXRKeyName))
+            toggleXrState();
         #endif
     }
 
     void LateUpdate()
     {
-        if (OnHeadsetUpdate != null && this.vrState == WebVRState.ENABLED) {
-            Matrix4x4 leftProjectionMatrix = WebVRMatrixUtil.NumbersToMatrix(GetFromSharedArray(0));
-            Matrix4x4 rightProjectionMatrix = WebVRMatrixUtil.NumbersToMatrix(GetFromSharedArray(1));
-            Matrix4x4 leftViewMatrix = WebVRMatrixUtil.NumbersToMatrix(GetFromSharedArray(2));
-            Matrix4x4 rightViewMatrix = WebVRMatrixUtil.NumbersToMatrix(GetFromSharedArray(3));
-            Matrix4x4 sitStandMatrix = WebVRMatrixUtil.NumbersToMatrix(GetFromSharedArray(4));
-            if (!this.capabilities.hasPosition)
-            {
-                sitStandMatrix = Matrix4x4.Translate(new Vector3(0, this.DefaultHeight, 0));
-            }
+        if (OnHeadsetUpdate == null || xrState != WebXRState.ENABLED) return;
+        
+        Matrix4x4 leftProjectionMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(0));
+        Matrix4x4 rightProjectionMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(1));
+        Matrix4x4 leftViewMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(2));
+        Matrix4x4 rightViewMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(3));
+        Matrix4x4 sitStandMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(4));
+        if (!capabilities.hasPosition)
+        {
+            sitStandMatrix = Matrix4x4.Translate(new Vector3(0, this.DefaultHeight, 0));
+        }
 
-            OnHeadsetUpdate(
-                leftProjectionMatrix,
-                rightProjectionMatrix,
-                leftViewMatrix,
-                rightViewMatrix,
-                sitStandMatrix);
-         }
+        OnHeadsetUpdate(
+            leftProjectionMatrix,
+            rightProjectionMatrix,
+            leftViewMatrix,
+            rightViewMatrix,
+            sitStandMatrix);
     }
 }

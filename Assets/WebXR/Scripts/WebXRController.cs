@@ -5,19 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.XR;
 
-[Obsolete("Use WebXRControllerHand")]
-public enum WebVRControllerHand { NONE, LEFT, RIGHT };
+public enum WebXRControllerHand { NONE, LEFT, RIGHT };
 
-[Obsolete("Use WebXRControllerButton")]
-[System.Serializable]
-public class WebVRControllerButton
+[Serializable]
+public class WebXRControllerButton
 {
     public bool pressed;
     public bool prevPressedState;
     public bool touched;
     public float value;
 
-    public WebVRControllerButton(bool isPressed, float buttonValue)
+    public WebXRControllerButton(bool isPressed, float buttonValue)
     {
         pressed = isPressed;
         prevPressedState = false;
@@ -25,13 +23,12 @@ public class WebVRControllerButton
     }
 }
 
-[Obsolete("Use WebXRController")]
-public class WebVRController : MonoBehaviour
+public class WebXRController : MonoBehaviour
 {
     [Tooltip("Controller hand to use.")]
-    public WebVRControllerHand hand = WebVRControllerHand.NONE;
+    public WebXRControllerHand hand = WebXRControllerHand.NONE;
     [Tooltip("Controller input settings.")]
-    public WebVRControllerInputMap inputMap;
+    public WebXRControllerInputMap inputMap;
     [Tooltip("Simulate 3dof controller")]
     public bool simulate3dof = false;
     [Tooltip("Vector from head to elbow")]
@@ -44,15 +41,15 @@ public class WebVRController : MonoBehaviour
     private XRNode handNode;
     private Quaternion headRotation;
     private Vector3 headPosition;
-    private Dictionary<string, WebVRControllerButton> buttonStates = new Dictionary<string, WebVRControllerButton>();
+    private Dictionary<string, WebXRControllerButton> buttonStates = new Dictionary<string, WebXRControllerButton>();
 
     // Updates button states from Web gamepad API.
-    private void UpdateButtons(WebVRControllerButton[] buttons)
+    private void UpdateButtons(WebXRControllerButton[] buttons)
     {
         for (int i = 0; i < buttons.Length; i++)
         {
-            WebVRControllerButton button = buttons[i];
-            foreach (WebVRControllerInput input in inputMap.inputs)
+            WebXRControllerButton button = buttons[i];
+            foreach (var input in inputMap.inputs)
             {
                 if (input.gamepadId == i)
                     SetButtonState(input.actionName, button.pressed, button.value);
@@ -64,24 +61,20 @@ public class WebVRController : MonoBehaviour
     {
         for (var i = 0; i < inputMap.inputs.Count; i++)
         {
-            WebVRControllerInput input = inputMap.inputs[i];
+            WebXRControllerInput input = inputMap.inputs[i];
             if (action == input.actionName)
             {
-                if (UnityEngine.XR.XRDevice.isPresent && !input.unityInputIsButton)
+                if (XRDevice.isPresent && !input.unityInputIsButton)
                 {
                     return Input.GetAxis(input.unityInputName);
                 }
-                else
-                {
-                    if (input.gamepadIsButton)
-                    {
-                        if (!buttonStates.ContainsKey(action))
-                            return 0;
-                        return buttonStates[action].value;
-                    }
-                    else
-                        return axes[i];
-                }
+
+                if (!input.gamepadIsButton) return axes[i];
+                
+                if (!buttonStates.ContainsKey(action))
+                    return 0;
+                return buttonStates[action].value;
+
             }
         }
         return 0;
@@ -89,25 +82,21 @@ public class WebVRController : MonoBehaviour
 
     public bool GetButton(string action)
     {
-        if (UnityEngine.XR.XRDevice.isPresent)
+        if (XRDevice.isPresent)
         {
-            foreach(WebVRControllerInput input in inputMap.inputs)
+            foreach(WebXRControllerInput input in inputMap.inputs)
             {
                 if (action == input.actionName && input.unityInputIsButton)
                     return Input.GetButton(input.unityInputName);
             }
         }
 
-        if (!buttonStates.ContainsKey(action))
-            return false;
-        return buttonStates[action].pressed;
+        return buttonStates.ContainsKey(action) && buttonStates[action].pressed;
     }
 
     private bool GetPastButtonState(string action)
     {
-        if (!buttonStates.ContainsKey(action))
-            return false;
-        return buttonStates[action].prevPressedState;
+        return buttonStates.ContainsKey(action) && buttonStates[action].prevPressedState;
     }
 
     private void SetButtonState(string action, bool isPressed, float value)
@@ -118,7 +107,7 @@ public class WebVRController : MonoBehaviour
             buttonStates[action].value = value;
         }
         else
-            buttonStates.Add(action, new WebVRControllerButton(isPressed, value));
+            buttonStates.Add(action, new WebXRControllerButton(isPressed, value));
     }
 
     private void SetPastButtonState(string action, bool isPressed)
@@ -131,9 +120,9 @@ public class WebVRController : MonoBehaviour
     public bool GetButtonDown(string action)
     {
         // Use Unity Input Manager when XR is enabled and WebVR is not being used (eg: standalone or from within editor).
-        if (UnityEngine.XR.XRDevice.isPresent)
+        if (XRDevice.isPresent)
         {
-            foreach(WebVRControllerInput input in inputMap.inputs)
+            foreach(WebXRControllerInput input in inputMap.inputs)
             {
                 if (action == input.actionName && input.unityInputIsButton)
                     return Input.GetButtonDown(input.unityInputName);
@@ -151,9 +140,9 @@ public class WebVRController : MonoBehaviour
     public bool GetButtonUp(string action)
     {
         // Use Unity Input Manager when XR is enabled and WebVR is not being used (eg: standalone or from within editor).
-        if (UnityEngine.XR.XRDevice.isPresent)
+        if (XRDevice.isPresent)
         {
-            foreach(WebVRControllerInput input in inputMap.inputs)
+            foreach(WebXRControllerInput input in inputMap.inputs)
             {
                 if (action == input.actionName && input.unityInputIsButton)
                     return Input.GetButtonUp(input.unityInputName);
@@ -174,9 +163,9 @@ public class WebVRController : MonoBehaviour
         Matrix4x4 rightViewMatrix,
         Matrix4x4 sitStandMatrix)
     {
-        Matrix4x4 trs = WebVRMatrixUtil.TransformViewMatrixToTRS(leftViewMatrix);
-        this.headRotation = WebVRMatrixUtil.GetRotationFromMatrix(trs);
-        this.headPosition = WebVRMatrixUtil.GetTranslationFromMatrix(trs);
+        Matrix4x4 trs = WebXRMatrixUtil.TransformViewMatrixToTRS(leftViewMatrix);
+        this.headRotation = WebXRMatrixUtil.GetRotationFromMatrix(trs);
+        this.headPosition = WebXRMatrixUtil.GetTranslationFromMatrix(trs);
         this.sitStand = sitStandMatrix;
     }
 
@@ -189,14 +178,14 @@ public class WebVRController : MonoBehaviour
         Vector3 position,
         Vector3 linearAcceleration,
         Vector3 linearVelocity,
-        WebVRControllerButton[] buttonValues,
+        WebXRControllerButton[] buttonValues,
         float[] axesValues)
     {
         if (handFromString(handValue) == hand)
         {
             SetVisible(true);
 
-            Quaternion sitStandRotation = WebVRMatrixUtil.GetRotationFromMatrix(this.sitStand);
+            Quaternion sitStandRotation = WebXRMatrixUtil.GetRotationFromMatrix(this.sitStand);
             Quaternion rotation = sitStandRotation * orientation;
 
             if (!hasPosition || this.simulate3dof) {
@@ -218,29 +207,27 @@ public class WebVRController : MonoBehaviour
         }
     }
 
-    private WebVRControllerHand handFromString(string handValue)
+    private WebXRControllerHand handFromString(string handValue)
     {
-        WebVRControllerHand handParsed = WebVRControllerHand.NONE;
-
-        if (!String.IsNullOrEmpty(handValue)) {
-            try
-            {
-                handParsed = (WebVRControllerHand) Enum.Parse(typeof(WebVRControllerHand), handValue.ToUpper(), true);
-            }
-            catch
-            {
-                Debug.LogError("Unrecognized controller Hand '" + handValue + "'!");
-            }
+        if (String.IsNullOrEmpty(handValue)) return WebXRControllerHand.NONE;
+        
+        try
+        {
+            return (WebXRControllerHand) Enum.Parse(typeof(WebXRControllerHand), handValue.ToUpper(), true);
         }
-        return handParsed;
+        catch
+        {
+            Debug.LogError("Unrecognized controller Hand '" + handValue + "'!");
+        }
+
+        return WebXRControllerHand.NONE;
     }
 
     private void SetVisible(bool visible) {
         Renderer[] rendererComponents = GetComponentsInChildren<Renderer>();
+        foreach (Renderer component in rendererComponents)
         {
-            foreach (Renderer component in rendererComponents) {
-                component.enabled = visible;
-            }
+            component.enabled = visible;
         }
     }
 
@@ -249,7 +236,7 @@ public class WebVRController : MonoBehaviour
     {
         // Set offset for degenerate "arm model" to elbow.
         Vector3 deltaControllerPosition = new Vector3(
-            this.eyesToElbow.x * (this.hand == WebVRControllerHand.LEFT ? -1 : this.hand == WebVRControllerHand.RIGHT ? 1 : 0),
+            this.eyesToElbow.x * (this.hand == WebXRControllerHand.LEFT ? -1 : this.hand == WebXRControllerHand.RIGHT ? 1 : 0),
             this.eyesToElbow.y,
             this.eyesToElbow.z);
 
@@ -272,10 +259,10 @@ public class WebVRController : MonoBehaviour
         {
             SetVisible(true);
 
-            if (this.hand == WebVRControllerHand.LEFT)
+            if (this.hand == WebXRControllerHand.LEFT)
                 handNode = XRNode.LeftHand;
 
-            if (this.hand == WebVRControllerHand.RIGHT)
+            if (this.hand == WebXRControllerHand.RIGHT)
                handNode = XRNode.RightHand;
 
             if (this.simulate3dof)
@@ -293,7 +280,7 @@ public class WebVRController : MonoBehaviour
                 transform.rotation = InputTracking.GetLocalRotation(handNode);
             }
 
-            foreach(WebVRControllerInput input in inputMap.inputs)
+            foreach(WebXRControllerInput input in inputMap.inputs)
             {
                 if (!input.unityInputIsButton)
                 {
@@ -313,15 +300,15 @@ public class WebVRController : MonoBehaviour
             Debug.LogError("A Input Map must be assigned to WebVRController!");
             return;
         }
-        WebVRManager.Instance.OnControllerUpdate += onControllerUpdate;
-        WebVRManager.Instance.OnHeadsetUpdate += onHeadsetUpdate;
+        WebXRManager.Instance.OnControllerUpdate += onControllerUpdate;
+        WebXRManager.Instance.OnHeadsetUpdate += onHeadsetUpdate;
         SetVisible(false);
     }
 
-    void OnDisabled()
+    void OnDisable()
     {
-        WebVRManager.Instance.OnControllerUpdate -= onControllerUpdate;
-        WebVRManager.Instance.OnHeadsetUpdate -= onHeadsetUpdate;
+        WebXRManager.Instance.OnControllerUpdate -= onControllerUpdate;
+        WebXRManager.Instance.OnHeadsetUpdate -= onHeadsetUpdate;
         SetVisible(false);
     }
 }

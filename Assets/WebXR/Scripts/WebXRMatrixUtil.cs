@@ -1,13 +1,11 @@
-using System;
 using UnityEngine;
 
-[Obsolete("Use WebXRMatrixUtil")]
-public static class WebVRMatrixUtil
+public static class WebXRMatrixUtil
 {
     // According to https://answers.unity.com/questions/402280/how-to-decompose-a-trs-matrix.html
-    public static void SetTransformFromViewMatrix(Transform transform, Matrix4x4 webVRViewMatrix)
+    public static void SetTransformFromViewMatrix(Transform transform, Matrix4x4 webXRViewMatrix)
     {
-        Matrix4x4 trs = TransformViewMatrixToTRS(webVRViewMatrix);
+        Matrix4x4 trs = TransformViewMatrixToTRS(webXRViewMatrix);
         transform.localPosition = trs.GetColumn(3);
         transform.localRotation = Quaternion.LookRotation(trs.GetColumn(2), trs.GetColumn(1));
         transform.localScale = new Vector3(
