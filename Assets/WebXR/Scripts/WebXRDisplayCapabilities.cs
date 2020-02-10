@@ -1,7 +1,5 @@
 ﻿[System.Serializable]
 public class WebXRDisplayCapabilities
 {
-	public bool canPresent;
-	public bool hasPosition;
-	public bool hasExternalDisplay;
+	public bool supportsImmersiveVR;
 }

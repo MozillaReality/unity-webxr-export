@@ -63,25 +63,9 @@
   XRManager.prototype.resize = function () {
     if (!this.canvas) return;
 
-    // if (this.session) {
-    //   var leftEye = this.vrDisplay.getEyeParameters('left');
-    //   var rightEye = this.vrDisplay.getEyeParameters('right');
-    //   var renderWidth = Math.max(leftEye.renderWidth, rightEye.renderWidth) * 2 * this.scaleResolution;
-    //   var renderHeight = Math.max(leftEye.renderHeight, rightEye.renderHeight) * this.scaleResolution;
-    //   this.canvas.width = renderWidth;
-    //   this.canvas.height = renderHeight;
-
-    //   // scale game container so we get a proper sized mirror of VR content to desktop.
-    //   if (this.vrDisplay.capabilities.hasExternalDisplay) {
-    //     var scaleX = window.innerWidth / renderWidth;
-    //     var scaleY = window.innerHeight / renderHeight;
-    //     this.gameContainer.setAttribute('style', `transform: scale(${scaleX}, ${scaleY}); transform-origin: top left;`);
-    //   }
-    // } else {
-      this.canvas.width = window.innerWidth;
-      this.canvas.height = window.innerHeight;
-      this.gameContainer.style.transform = '';
-    // }
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    this.gameContainer.style.transform = '';
   }
 
   XRManager.prototype.requestPresent = function () {
@@ -161,27 +145,15 @@
     // MozillaResearch.telemetry.performance.measure('LoadingTime', 'LoadingStart');
     document.body.dataset.unityLoaded = 'true';
 
-    // Send browser capabilities to Unity.
-    var canPresent = false;
-    var hasPosition = false;
-    var hasExternalDisplay = false;
-
-    if (this.xrDisplay) {
-      var capabilities = this.xrDisplay.capabilities
-      canPresent = capabilities.canPresent;
-      hasPosition = capabilities.hasPosition;
-      hasExternalDisplay = capabilities.hasExternalDisplay;
-    }
-
     this.setGameInstance(await this.unityProgressStart);
     this.resize();
 
+    // Received by WebXRManager.cs
     this.gameInstance.SendMessage(
       this.unityObjectName, 'OnXRCapabilities',
+      // Structure should match WebXRDisplayCapabilities.cs
       JSON.stringify({
-        canPresent: canPresent,
-        hasPosition: hasPosition,
-        hasExternalDisplay: hasExternalDisplay
+        supportsImmersiveVR: this.isVRSupported
       })
     );
   }

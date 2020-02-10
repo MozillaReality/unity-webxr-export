@@ -151,8 +151,8 @@ public class WebXRManager : MonoBehaviour
     public void OnXRCapabilities(WebXRDisplayCapabilities capabilities) {
         #if !UNITY_EDITOR && UNITY_WEBGL
         this.capabilities = capabilities;
-        if (!capabilities.canPresent)
-            WebVRUI.displayElementId("novr");
+        if (!capabilities.supportsImmersiveVR)
+            WebXRUI.displayXRElementId("novr");
         #endif
 
         if (OnXRCapabilitiesUpdate != null)
@@ -227,7 +227,7 @@ public class WebXRManager : MonoBehaviour
         Matrix4x4 leftViewMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(2));
         Matrix4x4 rightViewMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(3));
         Matrix4x4 sitStandMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(4));
-        if (!capabilities.hasPosition)
+        if (!capabilities.supportsImmersiveVR)
         {
             sitStandMatrix = Matrix4x4.Translate(new Vector3(0, this.DefaultHeight, 0));
         }

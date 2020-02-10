@@ -29,12 +29,6 @@ public class DesertFreeFlightController : MonoBehaviour {
 
     Quaternion originalRotation;
 
-    bool inDesktopLike {
-        get {
-            return capabilities.hasExternalDisplay;
-        }
-    }
-
     void Start()
     {
         WebXRManager.Instance.OnXRChange += onXRChange;
@@ -96,8 +90,7 @@ public class DesertFreeFlightController : MonoBehaviour {
     /// the device capabilities.
     void EnableAccordingToPlatform()
     {
-        rotationEnabled = inDesktopLike || !capabilities.canPresent;
-        translationEnabled = inDesktopLike || !capabilities.hasPosition;
+        rotationEnabled = translationEnabled =  !capabilities.supportsImmersiveVR;
     }
 
     public static float ClampAngle (float angle, float min, float max)

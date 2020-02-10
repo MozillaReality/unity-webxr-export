@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-// WebVR data class
+[Obsolete("Use WebXRData")]
 [System.Serializable]
 class WebVRData
 {
