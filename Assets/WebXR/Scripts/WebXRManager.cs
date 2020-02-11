@@ -66,7 +66,7 @@ public class WebXRManager : MonoBehaviour
     // Array stores  5 matrices, each 16 values, stored linearly.
     float[] sharedArray = new float[5 * 16];
 
-    private WebXRDisplayCapabilities capabilities;
+    private WebXRDisplayCapabilities _capabilities;
 
     public static WebXRManager Instance {
         get
@@ -149,8 +149,10 @@ public class WebXRManager : MonoBehaviour
     }
 
     public void OnXRCapabilities(WebXRDisplayCapabilities capabilities) {
-        #if !UNITY_EDITOR && UNITY_WEBGL
-        this.capabilities = capabilities;
+        #if UNITY_EDITOR
+        // Nothing to do
+        #elif UNITY_WEBGL
+        _capabilities = capabilities;
         if (!capabilities.supportsImmersiveVR)
             WebXRUI.displayXRElementId("novr");
         #endif
@@ -161,7 +163,9 @@ public class WebXRManager : MonoBehaviour
 
     public void toggleXrState()
     {
-        #if !UNITY_EDITOR && UNITY_WEBGL
+        #if UNITY_EDITOR
+        // No editor specific functionality
+        #elif UNITY_WEBGL
         if (this.xrState == WebXRState.ENABLED)
             setXrState(WebXRState.NORMAL);
         else
@@ -200,11 +204,14 @@ public class WebXRManager : MonoBehaviour
 
     void Start()
     {
-        #if !UNITY_EDITOR && UNITY_WEBGL
+        #if UNITY_EDITOR
+        // No editor specific functionality
+        #elif UNITY_WEBGL
         ConfigureToggleXRKeyName(toggleXRKeyName);
         XRInitSharedArray(sharedArray, sharedArray.Length);
         ListenWebXRData();
         #endif
+        
         SetTrackingSpaceType();
     }
 
@@ -226,11 +233,8 @@ public class WebXRManager : MonoBehaviour
         Matrix4x4 rightProjectionMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(1));
         Matrix4x4 leftViewMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(2));
         Matrix4x4 rightViewMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(3));
-        Matrix4x4 sitStandMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(4));
-        if (!capabilities.supportsImmersiveVR)
-        {
-            sitStandMatrix = Matrix4x4.Translate(new Vector3(0, this.DefaultHeight, 0));
-        }
+        // Matrix4x4 sitStandMatrix = WebXRMatrixUtil.NumbersToMatrix(GetFromSharedArray(4));
+        Matrix4x4 sitStandMatrix = Matrix4x4.Translate(new Vector3(0, DefaultHeight, 0));
 
         OnHeadsetUpdate(
             leftProjectionMatrix,

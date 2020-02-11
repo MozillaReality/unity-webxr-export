@@ -30,7 +30,7 @@
     this.init();
   }
 
-  XRManager.prototype.init = async function () {
+  XRManager.prototype.init = function () {
     if (window.WebXRPolyfill) {
       this.polyfill = new WebXRPolyfill();
     }
@@ -91,19 +91,21 @@
 
   XRManager.prototype.handleEndSession = function() {
     console.log('Exited VR');
+    this.gameInstance.SendMessage(this.unityObjectName, 'OnEndXR');
+    this.wasPresenting = false;
     this.session = null;
   }
 
   XRManager.prototype.endSession = function () {
     if (!this.session ) {
-      console.warn('No VR display to exit VR mode');
+      console.warn('No XR session to end');
       return;
     }
 
     return this.session.end().then(function () {
       this.handleEndSession();
     }).catch(function (err) {
-      console.error('Unable to exit VR mode:', err);
+      console.error('Unable to exit XR mode:', err);
     });
   }
 
@@ -269,12 +271,6 @@
     if (this.session && !this.wasPresenting) {
       this.gameInstance.SendMessage(this.unityObjectName, 'OnStartXR');
       this.wasPresenting = true;
-      this.resize();
-    }
-
-    if (!this.session && this.wasPresenting) {
-      this.gameInstance.SendMessage(this.unityObjectName, 'OnEndXR');
-      this.wasPresenting = false;
       this.resize();
     }
 

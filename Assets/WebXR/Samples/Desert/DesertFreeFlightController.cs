@@ -90,7 +90,7 @@ public class DesertFreeFlightController : MonoBehaviour {
     /// the device capabilities.
     void EnableAccordingToPlatform()
     {
-        rotationEnabled = translationEnabled =  !capabilities.supportsImmersiveVR;
+        rotationEnabled = translationEnabled = !capabilities.supportsImmersiveVR;
     }
 
     public static float ClampAngle (float angle, float min, float max)
