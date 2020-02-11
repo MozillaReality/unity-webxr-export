@@ -20,6 +20,8 @@
     this.session = null;
     this.refSpace = null;
     this.isVRSupported = false;
+    this.isARSupported = false;
+    this.isInlineSupported = false;
     this.xrData = new XRData();
     this.canvas = null;
     this.ctx = null;
@@ -37,9 +39,18 @@
 
     this.attachEventListeners();
 
+    navigator.xr.isSessionSupported('inline').then((supported) => {
+      // Spec states this mode should always be supported
+      this.isInlineSupported = supported;
+    });
+
     navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
       this.isVRSupported = supported;
       this.enterXRButton.dataset.enabled = supported;
+    });
+
+    navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
+      this.isARSupported = supported;
     });
   }
 
@@ -71,7 +82,7 @@
   XRManager.prototype.requestPresent = function () {
     if (!this.isVRSupported) return;
 
-    navigator.xr.requestSession('immersive-vr').then((session) => {
+    navigator.xr.requestSession('immersive-vr', {requiredFeatures: ['local-floor']}).then((session) => {
       this.session = session;
 
       session.addEventListener('end', this.handleEndSession.bind(this));
@@ -80,7 +91,7 @@
 
       session.updateRenderState({ baseLayer: new XRWebGLLayer(session, this.ctx) });
 
-      session.requestReferenceSpace('local').then((refSpace) => {
+      session.requestReferenceSpace('local-floor').then((refSpace) => {
         this.refSpace = refSpace;
       });
       console.log('Entered VR');
@@ -155,7 +166,9 @@
       this.unityObjectName, 'OnXRCapabilities',
       // Structure should match WebXRDisplayCapabilities.cs
       JSON.stringify({
-        supportsImmersiveVR: this.isVRSupported
+        supportsInline: this.isInlineSupported,
+        supportsImmersiveVR: this.isVRSupported,
+        supportsImmersiveAR: this.isARSupported
       })
     );
   }
