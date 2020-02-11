@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.EventSystems;
-using UnityEngine;
+﻿using UnityEngine;
+using WebXR;
 
 public class DesertFreeFlightController : MonoBehaviour {
     [Tooltip("Enable/disable rotation control. For use in Unity editor only.")]

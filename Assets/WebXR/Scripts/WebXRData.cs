@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 
-// WebVR data class
-[System.Serializable]
-class WebXRData
+namespace WebXR
 {
-	public WebXRControllerData[] controllers = new WebXRControllerData[0];
-	public static WebXRData CreateFromJSON(string jsonString)
+	[System.Serializable]
+	class WebXRData
 	{
-		return JsonUtility.FromJson<WebXRData> (jsonString);
+		public WebXRControllerData[] controllers = new WebXRControllerData[0];
+
+		public static WebXRData CreateFromJSON(string jsonString)
+		{
+			return JsonUtility.FromJson<WebXRData>(jsonString);
+		}
 	}
 }

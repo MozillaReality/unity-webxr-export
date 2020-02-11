@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using WebXR;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(FixedJoint))]
