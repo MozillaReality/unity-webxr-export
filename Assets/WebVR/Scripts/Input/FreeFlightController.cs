@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.EventSystems;
+﻿using System;
 using UnityEngine;
 
+[Obsolete]
 public class FreeFlightController : MonoBehaviour {
     [Tooltip("Enable/disable rotation control. For use in Unity editor only.")]
     public bool rotationEnabled = true;

@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using System.Linq;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using UnityEngine;
 
+[Obsolete]
 public class ControllerInteraction : MonoBehaviour
 {
     private FixedJoint attachJoint = null;

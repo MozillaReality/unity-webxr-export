@@ -46,6 +46,7 @@ namespace WebXR
         private XRNode handNode;
         private Quaternion headRotation;
         private Vector3 headPosition;
+        private Transform _t;
 
         private Dictionary<string, WebXRControllerButton>
             buttonStates = new Dictionary<string, WebXRControllerButton>();
@@ -191,31 +192,29 @@ namespace WebXR
             WebXRControllerButton[] buttonValues,
             float[] axesValues)
         {
-            if (handFromString(handValue) == hand)
+            if (handFromString(handValue) != hand) return;
+            
+            SetVisible(true);
+
+            Quaternion sitStandRotation = WebXRMatrixUtil.GetRotationFromMatrix(sitStand);
+            Quaternion rotation = sitStandRotation * orientation;
+
+            if (!hasPosition || simulate3dof)
             {
-                SetVisible(true);
-
-                Quaternion sitStandRotation = WebXRMatrixUtil.GetRotationFromMatrix(this.sitStand);
-                Quaternion rotation = sitStandRotation * orientation;
-
-                if (!hasPosition || this.simulate3dof)
-                {
-                    position = applyArmModel(
-                        this.sitStand.MultiplyPoint(this.headPosition),
-                        rotation,
-                        this.headRotation);
-                }
-                else
-                {
-                    position = this.sitStand.MultiplyPoint(position);
-                }
-
-                transform.rotation = rotation;
-                transform.position = position;
-
-                UpdateButtons(buttonValues);
-                this.axes = axesValues;
+                position = applyArmModel(
+                    sitStand.MultiplyPoint(headPosition),
+                    rotation,
+                    headRotation);
             }
+            else
+            {
+                position = sitStand.MultiplyPoint(position);
+            }
+
+            _t.SetPositionAndRotation(position, rotation);
+
+            UpdateButtons(buttonValues);
+            axes = axesValues;
         }
 
         private WebXRControllerHand handFromString(string handValue)
@@ -271,42 +270,44 @@ namespace WebXR
         void Update()
         {
             // Use Unity XR Input when enabled. When using WebVR, updates are performed onControllerUpdate.
-            if (XRDevice.isPresent)
+            if (!XRDevice.isPresent) return;
+            
+            SetVisible(true);
+
+            if (this.hand == WebXRControllerHand.LEFT)
+                handNode = XRNode.LeftHand;
+
+            if (this.hand == WebXRControllerHand.RIGHT)
+                handNode = XRNode.RightHand;
+
+            if (this.simulate3dof)
             {
-                SetVisible(true);
+                _t.SetPositionAndRotation(applyArmModel(
+                    InputTracking.GetLocalPosition(XRNode.Head), // we use head position as origin
+                    InputTracking.GetLocalRotation(handNode),
+                    InputTracking.GetLocalRotation(XRNode.Head)
+                ), InputTracking.GetLocalRotation(handNode));
+            }
+            else
+            {
+                _t.SetPositionAndRotation(InputTracking.GetLocalPosition(handNode), InputTracking.GetLocalRotation(handNode));
+            }
 
-                if (this.hand == WebXRControllerHand.LEFT)
-                    handNode = XRNode.LeftHand;
-
-                if (this.hand == WebXRControllerHand.RIGHT)
-                    handNode = XRNode.RightHand;
-
-                if (this.simulate3dof)
+            foreach (WebXRControllerInput input in inputMap.inputs)
+            {
+                if (!input.unityInputIsButton)
                 {
-                    transform.position = this.applyArmModel(
-                        InputTracking.GetLocalPosition(XRNode.Head), // we use head position as origin
-                        InputTracking.GetLocalRotation(handNode),
-                        InputTracking.GetLocalRotation(XRNode.Head)
-                    );
-                    transform.rotation = InputTracking.GetLocalRotation(handNode);
-                }
-                else
-                {
-                    transform.position = InputTracking.GetLocalPosition(handNode);
-                    transform.rotation = InputTracking.GetLocalRotation(handNode);
-                }
-
-                foreach (WebXRControllerInput input in inputMap.inputs)
-                {
-                    if (!input.unityInputIsButton)
-                    {
-                        if (Input.GetAxis(input.unityInputName) != 0)
-                            SetButtonState(input.actionName, true, Input.GetAxis(input.unityInputName));
-                        if (Input.GetAxis(input.unityInputName) < 1)
-                            SetButtonState(input.actionName, false, Input.GetAxis(input.unityInputName));
-                    }
+                    if (Input.GetAxis(input.unityInputName) != 0)
+                        SetButtonState(input.actionName, true, Input.GetAxis(input.unityInputName));
+                    if (Input.GetAxis(input.unityInputName) < 1)
+                        SetButtonState(input.actionName, false, Input.GetAxis(input.unityInputName));
                 }
             }
+        }
+
+        private void Awake()
+        {
+            _t = transform;
         }
 
         void OnEnable()
