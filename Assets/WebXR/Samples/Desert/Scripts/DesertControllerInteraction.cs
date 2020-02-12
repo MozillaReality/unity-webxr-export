@@ -7,8 +7,8 @@ using WebXR;
 [RequireComponent(typeof(WebXRController))]
 public class DesertControllerInteraction : MonoBehaviour
 {
-    private FixedJoint attachJoint = null;
-    private Rigidbody currentRigidBody = null;
+    private FixedJoint attachJoint;
+    private Rigidbody currentRigidBody;
     private List<Rigidbody> contactRigidBodies = new List<Rigidbody> ();
     private WebXRController controller;
     private Transform t;
@@ -74,7 +74,7 @@ public class DesertControllerInteraction : MonoBehaviour
     private Rigidbody GetNearestRigidBody() {
         Rigidbody nearestRigidBody = null;
         float minDistance = float.MaxValue;
-        float distance = 0.0f;
+        float distance;
 
         foreach (Rigidbody contactBody in contactRigidBodies) {
             distance = (contactBody.transform.position - t.position).sqrMagnitude;
