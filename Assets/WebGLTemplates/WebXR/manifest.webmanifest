@@ -25,7 +25,7 @@
       "src": "https://raw.githubusercontent.com/mozilla/unity-webvr-export/master/img/preview.gif",
       "sizes": "640x360",
       "type": "image/gif",
-      "purpose": "Animation of WebVR game exported from Unity"
+      "purpose": "Animation of WebXR game exported from Unity"
     }
   ],
   "categories": [
