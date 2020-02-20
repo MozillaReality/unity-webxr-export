@@ -11,9 +11,20 @@
     <title>%UNITY_CUSTOM_NAME% | %UNITY_WEB_NAME%</title>
     <meta name="description" content="%UNITY_CUSTOM_DESCRIPTION%">
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="styles/webxr.css">
-    <script src="%UNITY_WEBGL_LOADER_URL%"></script>
     <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" type="text/css" href="styles/webxr.css">
+
+    <script src="lib/telemetry.js"></script>
+    <script>
+      MozillaResearch.telemetry.start({
+        analytics: true,
+        errorLogging: true,
+        performance: true
+      });
+      MozillaResearch.telemetry.performance.mark('LoaderParsingStart');
+    </script>
+    
+    <script src="%UNITY_WEBGL_LOADER_URL%"></script>
     <script>
         UnityLoader.SystemInfo.mobile = false;  // Workaround to force `UnityLoader` to actually load on mobile.
         window.gameInstance = UnityLoader.instantiate('gameContainer', '%UNITY_WEBGL_BUILD_URL%', {
