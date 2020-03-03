@@ -12,6 +12,8 @@ public class DesertControllerInteraction : MonoBehaviour
     private List<Rigidbody> contactRigidBodies = new List<Rigidbody> ();
     private WebXRController controller;
     private Transform t;
+    private Vector3 lastPosition;
+    private Quaternion lastRotation;
 
     private Animator anim;
 
@@ -35,6 +37,14 @@ public class DesertControllerInteraction : MonoBehaviour
 
         // Use the controller button or axis position to manipulate the playback time for hand model.
         anim.Play("Take", -1, normalizedTime);
+    }
+
+    void FixedUpdate()
+    {
+        if (!currentRigidBody) return;
+        
+        lastPosition = currentRigidBody.position;
+        lastRotation = currentRigidBody.rotation;
     }
 
     void OnTriggerEnter(Collider other)
@@ -61,6 +71,9 @@ public class DesertControllerInteraction : MonoBehaviour
 
         currentRigidBody.MovePosition(t.position);
         attachJoint.connectedBody = currentRigidBody;
+        
+        lastPosition = currentRigidBody.position;
+        lastRotation = currentRigidBody.rotation;
     }
 
     public void Drop() {
@@ -68,6 +81,16 @@ public class DesertControllerInteraction : MonoBehaviour
             return;
 
         attachJoint.connectedBody = null;
+        
+        currentRigidBody.velocity = (currentRigidBody.position - lastPosition) / Time.deltaTime;
+        
+        var deltaRotation = currentRigidBody.rotation * Quaternion.Inverse(lastRotation);
+        float angle;
+        Vector3 axis;
+        deltaRotation.ToAngleAxis(out angle, out axis);
+        angle *= Mathf.Deg2Rad;
+        currentRigidBody.angularVelocity = axis * angle / Time.deltaTime;
+        
         currentRigidBody = null;
     }
 
