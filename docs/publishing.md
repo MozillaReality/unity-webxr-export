@@ -4,9 +4,9 @@ Publishing on the Internet is not different from publishing a blog or the landin
 
 ## Choosing a static web server
 
-Unless you use your own machines, it is likely you want to use a free hosting service. The main limit you'll find with free-hosting are restrictions over file-size, type and bandwidth. WebVR exports propietary formats for packaged assets and those can be heavy (from few megabytes to several hundreds).
+Unless you use your own machines, it is likely you want to use a free hosting service. The main limit you'll find with free-hosting are restrictions over file-size, type and bandwidth. WebXR exports propietary formats for packaged assets and those can be heavy (from few megabytes to several hundreds).
 
-This document assumes you have already exported your game with Unity, targeting WebGL and using the WebVR template that comes with the assets package. To know how to export your project for WebVR, please refer to [Setting up a Unity project for WebVR](./project-setup.md).
+This document assumes you have already exported your game with Unity, targeting WebGL and using the WebXR template that comes with the assets package. To know how to export your project for WebXR, please refer to [Setting up a Unity project for WebVR](./project-setup.md).
 
 ### Deploying on GitHub
 

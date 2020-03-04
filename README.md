@@ -1,15 +1,15 @@
 # Unity WebVR Assets
 
-Assets for creating [WebVR](https://webvr.rocks/)-enabled [Unity3D](https://unity3d.com/) projects.
+Assets for creating [WebXR](https://developer.mozilla.com/topics/mixed-reality/)-enabled [Unity3D](https://unity.com/) projects.
 
 **[Check out the demo now!](https://mozilla.github.io/unity-webvr-export/)**<br>
 [Read our blog post (February 2018).](https://hacks.mozilla.org/2018/02/create-vr-on-the-web-using-unity3d/)
 
-[![Preview of Unity WebVR-exported project in the browser](https://raw.githubusercontent.com/mozilla/unity-webvr-export/master/img/preview.gif)](https://mozilla.github.io/unity-webvr-export/)
+[![Preview of Unity WebXR-exported project in the browser](https://raw.githubusercontent.com/mozilla/unity-webvr-export/master/img/preview.gif)](https://mozilla.github.io/unity-webvr-export/)
 
 **[Free to download](https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152)** and available now on the [Unity Asset Store](https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152).
 
-<a href="https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152" title="Download the WebVR Assets package for free on the Unity Asset Store">
+<a href="https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152" title="Download the WebXR Assets package for free on the Unity Asset Store">
 <img src="https://raw.githubusercontent.com/mozilla/unity-webvr-export/master/img/asset-store.png" width="640" alt="Download the WebVR Assets package for free on the Unity Asset Store">
 </a>
 
@@ -17,7 +17,7 @@ Assets for creating [WebVR](https://webvr.rocks/)-enabled [Unity3D](https://unit
 
 ## Getting started
 
-* [Setting up a Unity project for WebVR](./docs/project-setup.md)
+* [Setting up a Unity project for WebXR](./docs/project-setup.md)
 * [Controllers and input system](./docs/controllers.md)
 * [In-editor VR playback for rapid testing](./docs/xr-testing.md)
 * [Publishing](./docs/publishing.md)
@@ -26,29 +26,37 @@ Assets for creating [WebVR](https://webvr.rocks/)-enabled [Unity3D](https://unit
 
 ## Need help?
 
-* [Join the WebVR Slack](https://webvr.rocks/slack) (join the [#unity channel](https://webvr.slack.com/messages/unity))
+* [Join the WebVR Slack](https://webvr-slack.herokuapp.com/) (join the [#unity channel](https://webvr.slack.com/messages/unity))
 
 ## Compatibility
 
 ### Unity editor version
 
-* `2018.2` and above.
+* `2018.4` and newer.
 
 ### Browser Compatibility
 
-| Platform | Browser | Compatible headsets | |
+WebXR has limited support at time of writing. See compatibility at [caniuse](https://caniuse.com/#feat=webxr) or on [MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API)
+
+A special build of Firefox, [Fiefox Reality](https://mixedreality.mozilla.org/firefox-reality/), has built-in support for WebXR.
+
+The polyfill will fall back to the old WebVR API if it is available.
+
+| Platform | Browser | Compatible headsets | Notes |
 | --- | --- | --- | --- |
 | Desktop | Firefox | HTC VIVE, Oculus Rift, Windows Mixed Reality headsets (using Steam VR) | [Setup instructions](https://webvr.rocks/firefox) |
 | Desktop | Microsoft Edge | Windows Mixed Reality headsets | [Setup instructions](https://webvr.rocks/microsoft_edge) |
 | Desktop | Chrome Canary | HTC VIVE, Oculus Rift, Windows Mixed Reality headsets | Browser flags required. [Setup instructions](https://webvr.rocks/chrome) |
+| Mobile | Oculus Browser | Oculus Quest |
+| Mobile | Firefox Reality | Oculus Quest |
 
-### Polyfilled WebVR
+### Polyfilled WebXR
 
-If the user does not have supported headset, browser or device, the content will still work through the use of the [WebVR Polyfill](https://github.com/immersive-web/webvr-polyfill).
+If the user does not have supported headset, browser or device, the content will still work through the use of the [WebXR Polyfill](https://github.com/immersive-web/webxr-polyfill).
 
 ### Mobile support
 
-This asset works by utilizing Unity's WebGL platform support and therefore shares the same limitations. Because of this, mobile support is limited and may not work. See [Unity's WebGL browser compatibility](https://docs.unity3d.com/2018.1/Documentation/Manual/webgl-browsercompatibility.html).
+This asset works by utilizing Unity's WebGL platform support and therefore shares the same limitations. Because of this, mobile support is limited and may not work. See [Unity's WebGL browser compatibility](https://docs.unity3d.com/Manual/webgl-browsercompatibility.html).
 
 ### Version History and Notes
 
@@ -66,17 +74,17 @@ Take a look at the contributor guides too.
 
 ## We want to hear from you!
 
-We’d love to hear about what you come up with using the _WebVR Assets_. **Share your work with us** and use the [#unitywebvr](https://twitter.com/search?f=tweets&q=%23unitywebvr) Twitter hashtag.
+We’d love to hear about what you come up with using the _WebXR Assets_. **Share your work with us** and use the [#unitywebvr](https://twitter.com/search?f=tweets&q=%23unitywebvr) Twitter hashtag.
 
-The Unity WebVR Assets is an open-source project (licensed under Apache 2) [available on GitHub](https://github.com/mozilla/unity-webvr-export).
+The Unity WebXR Assets is an open-source project (licensed under Apache 2) [available on GitHub](https://github.com/mozilla/unity-webvr-export).
 
 * [View known issues](https://github.com/mozilla/unity-webvr-export/issues)
 * [File an issue or feature request](https://github.com/mozilla/unity-webvr-export/issues/new)
 * [Contribute code or documentation to the project](https://github.com/mozilla/unity-webvr-export#contributing)
 
-Reach out to us with any questions you may have or help you may need, and participate in the discussions on the [WebVR Slack](https://webvr.rocks/slack) in the [#unity channel](https://webvr.slack.com/messages/unity).
+Reach out to us with any questions you may have or help you may need, and participate in the discussions on the [WebVR Slack](https://webvr-slack.herokuapp.com/) in the [#unity channel](https://webvr.slack.com/messages/unity).
 
-* [Join the WebVR Slack](https://webvr.rocks/slack) (join the [#unity channel](https://webvr.slack.com/messages/unity))
+* [Join the WebVR Slack](https://webvr-slack.herokuapp.com/) (join the [#unity channel](https://webvr.slack.com/messages/unity))
 
 
 ## Developer Privacy Notice for Data Collection
@@ -96,7 +104,7 @@ Also, thanks to [Arturo Paracuellos (@arturitu)](https://github.com/arturitu) fo
 
 ## License
 
-Copyright 2017 - 2018 Mozilla Corporation
+Copyright 2017 - 2020 Mozilla Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
