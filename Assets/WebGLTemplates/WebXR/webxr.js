@@ -155,7 +155,6 @@
   });
 
   XRManager.prototype.unityLoaded = async function () {
-    MozillaResearch.telemetry.performance.measure('LoadingTime', 'LoadingStart');
     document.body.dataset.unityLoaded = 'true';
 
     this.setGameInstance(await this.unityProgressStart);
