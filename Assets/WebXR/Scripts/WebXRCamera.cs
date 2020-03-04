@@ -31,13 +31,20 @@ namespace WebXR
 
             cameraMain.transform.localPosition = new Vector3(0, WebXRManager.Instance.DefaultHeight, 0);
 
-            postRenderCoroutine = StartCoroutine(endOfFrame());
+#if UNITY_ENGINE
+			// No editor specific funtionality
+#elif UNITY_WEBGL
+			postRenderCoroutine = StartCoroutine(endOfFrame());
+#endif
         }
 
         private void OnDisable()
         {
-            StopCoroutine(postRenderCoroutine);
-        }
+			if (postRenderCoroutine != null)
+			{
+				StopCoroutine(postRenderCoroutine);
+			}
+		}
 
         private void onVRChange(WebXRState state)
         {
