@@ -31,7 +31,7 @@ namespace WebXR
 
             cameraMain.transform.localPosition = new Vector3(0, WebXRManager.Instance.DefaultHeight, 0);
 
-#if UNITY_ENGINE
+#if UNITY_EDITOR
 			// No editor specific funtionality
 #elif UNITY_WEBGL
 			postRenderCoroutine = StartCoroutine(endOfFrame());
