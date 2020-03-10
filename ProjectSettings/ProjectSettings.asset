@@ -277,6 +277,7 @@ PlayerSettings:
   m_TemplateCustomTags:
     DESCRIPTION: Complete interactive 3D scene demo made in Unity and exported to
       WebVR with the WebVR template of the Unity WebVR assets
+    META_TAGS: <meta name="color-scheme" content="normal" />
     NAME: Sunny Desert
   mobileMTRendering:
     Android: 1
