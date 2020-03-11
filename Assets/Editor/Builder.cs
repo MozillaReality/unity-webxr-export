@@ -14,7 +14,7 @@ namespace WebXR.Editor
 		[MenuItem("Build/Package")]
 		public static void BuildPackage()
 		{
-			AssetDatabase.ExportPackage(new[] { "Assets/WebXR", "Assets/WebGLTemplates/WebXR" }, "WebXR-Assets.unitypackage");
+			AssetDatabase.ExportPackage(new[] { "Assets/WebXR", "Assets/WebGLTemplates/WebXR" }, "WebXR-Assets.unitypackage", ExportPackageOptions.Recurse);
 		}
 
 		[MenuItem("Build/Desert Sample")]
