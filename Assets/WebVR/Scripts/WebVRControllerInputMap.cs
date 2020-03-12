@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Obsolete("Use WebXRControllerInputMap")]
 [CreateAssetMenu(menuName = "WebVRControllerInputMap")]
 public class WebVRControllerInputMap : ScriptableObject {
     [Header("WebVR Controller Input Map")]
     public List<WebVRControllerInput> inputs;
 }
 
+[Obsolete("Use WebXRControllerInput")]
 [System.Serializable]
 public class WebVRControllerInput {
     [Tooltip("A meaningful name describing the gesture performed on the controller.")]

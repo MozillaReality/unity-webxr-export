@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[Obsolete("Use WebXRDisplayCapabilities")]
 [System.Serializable]
 public class WebVRDisplayCapabilities
 {

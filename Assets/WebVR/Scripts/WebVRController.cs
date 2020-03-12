@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.XR;
 
+[Obsolete("Use WebXRControllerHand")]
 public enum WebVRControllerHand { NONE, LEFT, RIGHT };
 
+[Obsolete("Use WebXRControllerButton")]
 [System.Serializable]
 public class WebVRControllerButton
 {
@@ -23,6 +25,7 @@ public class WebVRControllerButton
     }
 }
 
+[Obsolete("Use WebXRController")]
 public class WebVRController : MonoBehaviour
 {
     [Tooltip("Controller hand to use.")]

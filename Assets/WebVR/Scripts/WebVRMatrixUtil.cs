@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 
+[Obsolete("Use WebXRMatrixUtil")]
 public static class WebVRMatrixUtil
 {
     // According to https://answers.unity.com/questions/402280/how-to-decompose-a-trs-matrix.html

@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.XR;
 using System.Linq;
 using System.Collections;
 using System.Runtime.InteropServices;
 
+[Obsolete("Use WebXRCamera")]
 public class WebVRCamera : MonoBehaviour
 {
     private Camera cameraMain, cameraL, cameraR;

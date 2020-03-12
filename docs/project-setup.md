@@ -1,14 +1,14 @@
-# Setting up a Unity project for WebVR
+# Setting up a Unity project for WebXR
 
 **There are two ways to start a WebVR enabled project using Unity.**
 
 1. **[Download the example project](https://github.com/mozilla/unity-webvr-export/archive/master.zip).**
 
-    This is the simplest option, to do this, [download the project](https://github.com/mozilla/unity-webvr-export/archive/master.zip) and open in Unity. You can follow steps from [step #7](#7-build-your-project-to-webvr) onwards to build the project to WebVR.
+    This is the simplest option, to do this, [download the project](https://github.com/mozilla/unity-webvr-export/archive/master.zip) and open in Unity. You can follow steps from [step #7](#7-build-your-project-to-webvr) onwards to build the project to WebXR.
 
 2. **[Start by Creating a new Unity 3D Project](#1-create-a-new-unity-3d-project).**
 
-    In this tutorial, we cover option 2, starting from new, stepping through each step from creating a new Unity project, adding the WebVR Assets, then building to WebVR.
+    In this tutorial, we cover option 2, starting from new, stepping through each step from creating a new Unity project, adding the WebXR Assets, then building to WebGL.
 
 ## 1. Create a new Unity 3D project.
 
@@ -22,6 +22,10 @@ Open the menus: `File > Build Settings`
 
 ![WebGL Platform](./images/webgl-platform.png)
 
+If it isn't, use the Unity Hub to install it for your version of Unity.
+
+![WebGL Install](./images/webgl-hub.png)
+
 ## 3. Enable Virtual Reality support in Unity.
 
 See [In-editor VR playback for rapid testing](./xr-testing.md) for full steps.
@@ -34,41 +38,45 @@ See [In-editor VR playback for rapid testing](./xr-testing.md) for full steps.
 
 ![Asset Store](./images/asset-store.png)
 
-Alternatively, download and install the [`WebVR-Assets.unitypackage`](https://github.com/mozilla/unity-webvr-export/raw/master/WebVR-Assets.unitypackage) from this repo and use (`Assets > Import Package > Custom Package`) to import the package into your project.
+Alternatively, download and install the [`WebXR-Assets.unitypackage`](https://github.com/mozilla/unity-webvr-export/raw/master/WebXR-Assets.unitypackage) from this repo and use (`Assets > Import Package > Custom Package`) to import the package into your project.
 
-![WebVR package](./images/import-package.png)
+![WebXR package](./images/import-package.png)
 
-## 5. Add the WebVR prefab to your scene.
+If you are not upgrading a project from an older version you can uncheck `/WebGLTemplates/WebVR` and `/WebVR`
 
-Disable the standard default camera, so that it does not interfere with the cameras used in the WebVR prefab.
+## 5. Add the WebXR prefab to your scene.
+
+Disable the standard default camera, so that it does not interfere with the cameras used in the WebXR prefab.
 
 To do this, select `Main Camera` from the scene's `Hierarchy`; then, delete or disable the camera from the `Inspector`.
 
-![WebVR package](./images/disable-main-camera.png)
+![WebXR package](./images/disable-main-camera.png)
 
-Add the `WebVRCameraSet` prefab (`Assets > WebVR > Prefabs > WebVRCameraSet.prefab`):
+Add the `WebXRCameraSet` prefab (`Assets > WebXR > Prefabs > WebXRCameraSet.prefab`):
 
 ![Import prefab](./images/camera-prefab.gif)
 
-The prefab contains hand controllers, VR Camera setup and other components needed for your game to work with WebVR. 
+The prefab contains hand controllers, VR Camera setup and other components needed for your game to work with WebXR. 
 
 ## 6. Add Input Manager settings to your project.
+
+This step is only needed for desktop platforms and the editor. If you don't need to support those, skip to step 7.
 
 Copy [`InputManager.asset`](https://github.com/mozilla/unity-webvr-export/raw/master/ProjectSettings/InputManager.asset) into your Project `/ProjectSettings` folder.  This will add pre-configured Unity Input Manager input axes needed for controllers to work.
 
 See [Controllers and Input System](./controllers.md) for more details about how this works.
 
-## 7. You're Unity project is setup. Play to see the result!
+## 7. Your Unity project is setup. Play to see the result!
 
 ![Import prefab](./images/editor-play.gif)
 
-## 8. Build your project to WebVR
+## 8. Build your project to WebXR
 
-### Select the WebVR template from player settings.
+### Select the WebXR template from player settings.
 
 Go to `Edit > Project Settings > Player`:
 
-![WebVR template](./images/webvr-template.png)
+![WebXR template](./images/webxr-template.png)
 
 ### Build and run your project in the browser!
 

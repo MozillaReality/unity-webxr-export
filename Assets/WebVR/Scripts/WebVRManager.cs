@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 
+[Obsolete("Use WebXRState")]
 public enum WebVRState { ENABLED, NORMAL }
 
+[Obsolete("Use WebXRManager")]
 public class WebVRManager : MonoBehaviour
 {
     [Tooltip("Name of the key used to alternate between VR and normal mode. Leave blank to disable.")]
