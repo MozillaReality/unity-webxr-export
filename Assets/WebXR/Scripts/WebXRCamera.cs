@@ -16,7 +16,7 @@ namespace WebXR
 
         private IEnumerator endOfFrame()
         {
-            // Wait until end of frame to report back to WebVR browser to submit frame.
+            // Wait until end of frame to report back to WebXR browser to submit frame.
             while (enabled)
             {
                 yield return wait;

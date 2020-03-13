@@ -1,10 +1,10 @@
 # Setting up a Unity project for WebXR
 
-**There are two ways to start a WebVR enabled project using Unity.**
+**There are two ways to start a WebXR enabled project using Unity.**
 
-1. **[Download the example project](https://github.com/mozilla/unity-webvr-export/archive/master.zip).**
+1. **[Download the example project](https://github.com/mozilla/unity-webxr-export/archive/master.zip).**
 
-    This is the simplest option, to do this, [download the project](https://github.com/mozilla/unity-webvr-export/archive/master.zip) and open in Unity. You can follow steps from [step #7](#7-build-your-project-to-webvr) onwards to build the project to WebXR.
+    This is the simplest option, to do this, [download the project](https://github.com/mozilla/unity-webxr-export/archive/master.zip) and open in Unity. You can follow steps from [step #7](#7-build-your-project-to-webxr) onwards to build the project to WebXR.
 
 2. **[Start by Creating a new Unity 3D Project](#1-create-a-new-unity-3d-project).**
 

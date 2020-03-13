@@ -32,7 +32,7 @@ If you're a web developer, there are several popular JavaScript tools and framew
 
 ## How does it work?
 
-The package works by using a [custom WebGL template](https://docs.unity3d.com/Manual/webgl-templates.html) and Unity's [message passing](https://docs.unity3d.com/Manual/webgl-interactingwithbrowserscripting.html) to send the necessary headset and controller values from the WebVR API into Unity, the values are then applied to cameras and controllers before being then rendered.  The rendered frames are then submitted to the headset using WebVR API.
+The package works by using a [custom WebGL template](https://docs.unity3d.com/Manual/webgl-templates.html) and Unity's [message passing](https://docs.unity3d.com/Manual/webgl-interactingwithbrowserscripting.html) to send the necessary headset and controller values from the WebXR API into Unity, the values are then applied to cameras and controllers before being then rendered.  The rendered frames are then submitted to the headset using WebXR API.
 
 ## Why wouldn't I just create a native app?
 
@@ -58,6 +58,6 @@ You can increase the memory that is available to your application from the playe
 
 ## Do I always have to re-build before I can test my experience?
 
-You can work within the Unity editor by enabling VR support in Unity before publishing to WebVR.
+You can work within the Unity editor by enabling VR support in Unity before publishing to WebXR.
 
 * See [In-editor VR playback for rapid testing](./xr-testing.md).

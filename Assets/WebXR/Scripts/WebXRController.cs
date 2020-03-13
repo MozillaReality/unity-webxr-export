@@ -128,7 +128,7 @@ namespace WebXR
 
         public bool GetButtonDown(string action)
         {
-            // Use Unity Input Manager when XR is enabled and WebVR is not being used (eg: standalone or from within editor).
+            // Use Unity Input Manager when XR is enabled and WebXR is not being used (eg: standalone or from within editor).
             if (XRDevice.isPresent)
             {
                 foreach (WebXRControllerInput input in inputMap.inputs)
@@ -149,7 +149,7 @@ namespace WebXR
 
         public bool GetButtonUp(string action)
         {
-            // Use Unity Input Manager when XR is enabled and WebVR is not being used (eg: standalone or from within editor).
+            // Use Unity Input Manager when XR is enabled and WebXR is not being used (eg: standalone or from within editor).
             if (XRDevice.isPresent)
             {
                 foreach (WebXRControllerInput input in inputMap.inputs)
@@ -269,7 +269,7 @@ namespace WebXR
 
         void Update()
         {
-            // Use Unity XR Input when enabled. When using WebVR, updates are performed onControllerUpdate.
+            // Use Unity XR Input when enabled. When using WebXR, updates are performed onControllerUpdate.
             if (!XRDevice.isPresent) return;
             
             SetVisible(true);
@@ -314,7 +314,7 @@ namespace WebXR
         {
             if (inputMap == null)
             {
-                Debug.LogError("A Input Map must be assigned to WebVRController!");
+                Debug.LogError("A Input Map must be assigned to WebXRController!");
                 return;
             }
 

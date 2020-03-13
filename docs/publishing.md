@@ -6,7 +6,7 @@ Publishing on the Internet is not different from publishing a blog or the landin
 
 Unless you use your own machines, it is likely you want to use a free hosting service. The main limit you'll find with free-hosting are restrictions over file-size, type and bandwidth. WebXR exports propietary formats for packaged assets and those can be heavy (from few megabytes to several hundreds).
 
-This document assumes you have already exported your game with Unity, targeting WebGL and using the WebXR template that comes with the assets package. To know how to export your project for WebXR, please refer to [Setting up a Unity project for WebVR](./project-setup.md).
+This document assumes you have already exported your game with Unity, targeting WebGL and using the WebXR template that comes with the assets package. To know how to export your project for WebXR, please refer to [Setting up a Unity project for WebXR](./project-setup.md).
 
 ### Deploying on GitHub
 
@@ -18,7 +18,7 @@ When targeting a production release, don't forget to [GZIP your assets](https://
 
 ![GZIP option in Player Settings](./images/gzip.png)
 
-Even if your files are not that big, we hope you'll be successful and attract tons of users to your game. That means potentially thousands of gigabytes being downloaded per month. We are working on improving the template to [save as much bandwidth as possible](https://github.com/mozilla/unity-webvr-export/issues/98) but eventually, you'll exceed bandwidth limits. If that's the case, consider using a CDN or get a paid hosting plan. There are [very good and inexpensive plans out there](http://www.turiyaware.com/finding-the-right-hosting-for-indie-game-developers/).
+Even if your files are not that big, we hope you'll be successful and attract tons of users to your game. That means potentially thousands of gigabytes being downloaded per month. We are working on improving the template to [save as much bandwidth as possible](https://github.com/mozilla/unity-webxr-export/issues/98) but eventually, you'll exceed bandwidth limits. If that's the case, consider using a CDN or get a paid hosting plan. There are [very good and inexpensive plans out there](http://www.turiyaware.com/finding-the-right-hosting-for-indie-game-developers/).
 
 #### Integrating with a CDN
 

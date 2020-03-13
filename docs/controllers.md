@@ -51,7 +51,7 @@ To create a new `WebXRControllerInputMap`, use `Asset > Create > Web XR Controll
 
 # Configure Unity Input Manager
 
-To get up and running using pre-configured Input Manager settings, follow [Step #5, Add Input Manager Settings to your Project](project-setup.md#5-add-input-manager-settings-to-your-project) in the [Setting up a Unity project for WebVR](./project-setup.md) guide.
+To get up and running using pre-configured Input Manager settings, follow [Step #5, Add Input Manager Settings to your Project](project-setup.md#5-add-input-manager-settings-to-your-project) in the [Setting up a Unity project for WebXR](./project-setup.md) guide.
 
 You can also choose to manually configure the Input Manager by using `Edit > Project Settings > Input`
 

@@ -276,7 +276,7 @@ PlayerSettings:
   openGLRequireES31AEP: 0
   m_TemplateCustomTags:
     DESCRIPTION: Complete interactive 3D scene demo made in Unity and exported to
-      WebVR with the WebVR template of the Unity WebVR assets
+      WebXR with the WebXR template of the Unity WebXR assets
     META_TAGS: <meta name="color-scheme" content="normal" />
     NAME: Sunny Desert
   mobileMTRendering:
@@ -538,14 +538,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: WebVR-test2
+  metroPackageName: WebXR-test2
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: WebVR-test2
+  metroApplicationDescription: WebXR-test2
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0

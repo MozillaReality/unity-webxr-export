@@ -27,6 +27,6 @@ For rapid testing in your headset, you can enable Virtual Reality support in you
     - **`OpenVR`** (i.e., for the HTC Vive and Windows Mixed Reality headsets)
     - **`Oculus`** (i.e., for the Oculus Rift and, soon, Oculus Go headsets)
 
-    When building for [WebVR](./build.md), ensure that the **`WebGL`** option is still selected in the **`Platform`** list (**`File > Build Settings…`**).
+    When building for [WebXR](./build.md), ensure that the **`WebGL`** option is still selected in the **`Platform`** list (**`File > Build Settings…`**).
 
       ![Screenshot of "Platform" list in Unity's "Build Settings…" menu](./images/webgl-platform.png 'Screenshot of "Platform" list in Unity\'s "Build Settings…" menu')

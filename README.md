@@ -1,16 +1,16 @@
-# Unity WebVR Assets
+# Unity WebXR Exporter
 
 Assets for creating [WebXR](https://developer.mozilla.com/topics/mixed-reality/)-enabled [Unity3D](https://unity.com/) projects.
 
-**[Check out the demo now!](https://mozilla.github.io/unity-webvr-export/)**<br>
+**[Check out the demo now!](https://mozilla.github.io/unity-webxr-export/)**<br>
 [Read our blog post (February 2018).](https://hacks.mozilla.org/2018/02/create-vr-on-the-web-using-unity3d/)
 
-[![Preview of Unity WebXR-exported project in the browser](https://raw.githubusercontent.com/mozilla/unity-webvr-export/master/img/preview.gif)](https://mozilla.github.io/unity-webvr-export/)
+[![Preview of Unity WebXR-exported project in the browser](https://raw.githubusercontent.com/mozilla/unity-webxr-export/master/img/preview.gif)](https://mozilla.github.io/unity-webxr-export/)
 
 **[Free to download](https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152)** and available now on the [Unity Asset Store](https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152).
 
 <a href="https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152" title="Download the WebXR Assets package for free on the Unity Asset Store">
-<img src="https://raw.githubusercontent.com/mozilla/unity-webvr-export/master/img/asset-store.png" width="640" alt="Download the WebVR Assets package for free on the Unity Asset Store">
+<img src="https://raw.githubusercontent.com/mozilla/unity-webxr-export/master/img/asset-store.png" width="640" alt="Download the WebVR Assets package for free on the Unity Asset Store">
 </a>
 
 <hr>

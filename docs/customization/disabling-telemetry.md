@@ -1,6 +1,6 @@
 # Disabling Telemetry
 
-The code that enables Mozilla-Research Telemetry collection is in the VR template that comes with the package. Ensure you've already added [the package from the store](https://u3d.as/1476) to your Unity project and look for the following snippet inside the [`index.html` file](../../Assets/WebGLTemplates/WebVR/index.html) of the template:
+The code that enables Mozilla-Research Telemetry collection is in the VR template that comes with the package. Ensure you've already added [the package from the store](https://u3d.as/1476) to your Unity project and look for the following snippet inside the [`index.html` file](../../Assets/WebGLTemplates/WebXR/index.html) of the template:
 
 ```js
 MozillaResearch.telemetry.start({
