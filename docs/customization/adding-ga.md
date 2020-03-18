@@ -2,7 +2,7 @@
 
 Google Analytics is a popular web analytics service that tracks and reports website traffic. It offers insight about your user behaviour and allows you to make informed decisions regarding the evolution of your site.
 
-The [VR template](../../Assets/WebGLTemplates/WebVR/index.html) that comes with the [Unity package](https://u3d.as/1476) already includes Analytics as a part of the telemetry library used for [collecting usage data](../data-collection.md) but you'll need to set up a Google Analytics account and get a [Tracking ID](https://support.google.com/analytics/answer/7372977) first, before using it.
+The [XR template](../../Assets/WebGLTemplates/WebXR/index.html) that comes with the [Unity package](https://u3d.as/1476) already includes Analytics as a part of the telemetry library used for [collecting usage data](../data-collection.md) but you'll need to set up a Google Analytics account and get a [Tracking ID](https://support.google.com/analytics/answer/7372977) first, before using it.
 
 ## Quick set up
 

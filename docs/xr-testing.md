@@ -7,7 +7,7 @@ For rapid testing in your headset, you can enable Virtual Reality support in you
 ![Animation of Unity's XR Settings](./images/unity-xr-settings.gif "Animation of Unity's XR Settings")
 
 1. Select the **`File > Build Settings…`** menu option from the top-level Unity application menu.
-2. When the pop-up window appears, select to highlight the **`PC, Mac & Linux Standalone`** option in the **`Platform`** list. (When you are ready to [build your application for WebVR](./build.md), ensure that **`WebGL`** is still the selected platform.)
+2. When the pop-up window appears, select to highlight the **`PC, Mac & Linux Standalone`** option in the **`Platform`** list. (When you are ready to [build your application for WebXR](./build.md), ensure that **`WebGL`** is still the selected platform.)
 
     ![Screenshot of "Platform" list in Unity's "Build Settings…" menu](./images/standalone-platform.png 'Screenshot of "Platform" list in Unity\'s "Build Settings…" menu')
 
@@ -27,6 +27,6 @@ For rapid testing in your headset, you can enable Virtual Reality support in you
     - **`OpenVR`** (i.e., for the HTC Vive and Windows Mixed Reality headsets)
     - **`Oculus`** (i.e., for the Oculus Rift and, soon, Oculus Go headsets)
 
-    When building for [WebVR](./build.md), ensure that the **`WebGL`** option is still selected in the **`Platform`** list (**`File > Build Settings…`**).
+    When building for [WebXR](./build.md), ensure that the **`WebGL`** option is still selected in the **`Platform`** list (**`File > Build Settings…`**).
 
       ![Screenshot of "Platform" list in Unity's "Build Settings…" menu](./images/webgl-platform.png 'Screenshot of "Platform" list in Unity\'s "Build Settings…" menu')

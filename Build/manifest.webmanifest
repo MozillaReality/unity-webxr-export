@@ -1,9 +1,9 @@
 {
   "lang": "en",
   "dir": "ltr",
-  "name": "Unity WebVR Game",
-  "short_name": "Unity WebVR",
-  "description": "WebVR Game exported from Unity.",
+  "name": "Unity WebXR Game",
+  "short_name": "Unity WebXR",
+  "description": "WebXR Game exported from Unity.",
   "start_url": "./?src=manifest",
   "display": "standalone",
   "background_color": "#111",
@@ -25,14 +25,14 @@
       "src": "https://raw.githubusercontent.com/mozilla/unity-webvr-export/master/img/preview.gif",
       "sizes": "640x360",
       "type": "image/gif",
-      "purpose": "Animation of WebVR game exported from Unity"
+      "purpose": "Animation of WebXR game exported from Unity"
     }
   ],
   "categories": [
     "games",
     "unity",
-    "webvr",
-    "unity-webvr"
+    "webxr",
+    "unity-webxr"
   ],
   "xr_available_platforms": [
     {

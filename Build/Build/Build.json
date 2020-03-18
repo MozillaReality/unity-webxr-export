@@ -1,6 +1,6 @@
 {
 "companyName": "DefaultCompany",
-"productName": "Unity-WebVR-Export",
+"productName": "Unity-WebXR-Export",
 "dataUrl": "Build.data.unityweb",
 "wasmCodeUrl": "Build.wasm.code.unityweb",
 "wasmFrameworkUrl": "Build.wasm.framework.unityweb",
