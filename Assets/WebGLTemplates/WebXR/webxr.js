@@ -315,8 +315,6 @@
     gameInstance.SendMessage('WebXRCameraSet', 'OnWebXRData', JSON.stringify({
       controllers: xrData.gamepads
     }));
-
-    this.xrDisplay.submitFrame();
   }
 
   XRManager.prototype.unityMessage = function (msg) {
