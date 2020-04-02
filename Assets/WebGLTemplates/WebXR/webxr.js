@@ -20,7 +20,6 @@
     this.session = null;
     this.refSpace = null;
     this.isVRSupported = false;
-    this.isARSupported = false;
     this.isInlineSupported = false;
     this.xrData = new XRData();
     this.canvas = null;
@@ -47,10 +46,6 @@
     navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
       this.isVRSupported = supported;
       this.enterXRButton.dataset.enabled = supported;
-    });
-
-    navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
-      this.isARSupported = supported;
     });
   }
 
@@ -166,8 +161,7 @@
       // Structure should match WebXRDisplayCapabilities.cs
       JSON.stringify({
         supportsInline: this.isInlineSupported,
-        supportsImmersiveVR: this.isVRSupported,
-        supportsImmersiveAR: this.isARSupported
+        supportsImmersiveVR: this.isVRSupported
       })
     );
   }
