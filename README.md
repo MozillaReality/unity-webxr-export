@@ -2,7 +2,7 @@
 
 Assets for creating [WebXR](https://developer.mozilla.com/topics/mixed-reality/)-enabled [Unity3D](https://unity.com/) projects.
 
-**[Check out the demo now!](https://mozilla.github.io/unity-webxr-export/)**<br>
+**[Check out the demo now!](https://mixedreality.mozilla.org/unity-webxr-export/)**<br>
 [Read our blog post (February 2018).](https://hacks.mozilla.org/2018/02/create-vr-on-the-web-using-unity3d/)
 
 [![Preview of Unity WebXR-exported project in the browser](https://raw.githubusercontent.com/mozilla/unity-webxr-export/master/img/preview.gif)](https://mozilla.github.io/unity-webxr-export/)
