@@ -40,7 +40,6 @@
       this.polyfill = new WebXRPolyfill();
     }
 
-    //this.resize();
     this.attachEventListeners();
 
     navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
@@ -131,6 +130,8 @@
     if (!this.gameInstance) {
       this.gameInstance = gameInstance;
       this.canvas = this.gameInstance.Module.canvas;
+      this.resize();
+      
       this.ctx = this.gameInstance.Module.ctx;
       var thisXRMananger = this;
       this.gameInstance.Module.InternalBrowser.requestAnimationFrame = function (func) {
