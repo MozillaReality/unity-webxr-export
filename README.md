@@ -10,7 +10,6 @@ Assets for creating [WebXR](https://developer.mozilla.com/topics/mixed-reality/)
 **[Free to download](https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152)** and available now on the [Unity Asset Store](https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152).
 
 <a href="https://assetstore.unity.com/packages/templates/systems/webvr-assets-109152" title="Download the WebXR Assets package for free on the Unity Asset Store">
-<img src="https://raw.githubusercontent.com/mozilla/unity-webxr-export/master/img/asset-store.png" width="640" alt="Download the WebVR Assets package for free on the Unity Asset Store">
 </a>
 
 <hr>
