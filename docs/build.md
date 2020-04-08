@@ -12,7 +12,7 @@ If you are a maintainer of this project, and you modified the demo scene distrib
 
 # Building the Unity Package
 
-If you are contributing to the Assets, you can build and export a new version of the [`WebXR-Assets.unitypackage` file](../WebXR-Assets.unitypackage).
+If you are contributing to the Assets, you can build and export a new version of the [`WebXR-Exporter.unitypackage` file](../WebXR-Exporter.unitypackage).
 
 Notice that the package does not include all the assets in the repository but **only those under `WebXR`, and `WebGLTemplates/WebXR`**:
 
@@ -20,7 +20,7 @@ Notice that the package does not include all the assets in the repository but **
 
     ![Exporting package](../img/exporting-asset-package.png)
 
-2. When prompted for the file location, set **`WebXR-Assets`** as the filename of the destination Unity Asset Package, and press the **`Save`** button.
+2. When prompted for the file location, set **`WebXR-Exporter`** as the filename of the destination Unity Asset Package, and press the **`Save`** button.
 
     ![Export package …](../img/export-asset-package.png)
 

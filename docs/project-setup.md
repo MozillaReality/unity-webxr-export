@@ -38,7 +38,7 @@ See [In-editor VR playback for rapid testing](./xr-testing.md) for full steps.
 
 ![Asset Store](./images/asset-store.png)
 
-Alternatively, download and install the [`WebXR-Assets.unitypackage`](https://github.com/mozilla/unity-webvr-export/raw/master/WebXR-Assets.unitypackage) from this repo and use (`Assets > Import Package > Custom Package`) to import the package into your project.
+Alternatively, download and install the [`WebXR-Exporter.unitypackage`](https://github.com/mozilla/unity-webvr-export/raw/master/WebXR-Exporter.unitypackage) from this repo and use (`Assets > Import Package > Custom Package`) to import the package into your project.
 
 ![WebXR package](./images/import-package.png)
 
