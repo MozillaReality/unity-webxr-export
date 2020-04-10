@@ -20,9 +20,12 @@ namespace WebXR.Editor
 		[MenuItem("Build/Desert Sample")]
 		public static void BuildDesertSample()
 		{
+#if !UNITY_2018_4_OR_NEWER
 			// There is no explicit api for setting the template as of 2018.4
 			PlayerSettings.SetPropertyString("template", "PROJECT:WebXR", BuildTargetGroup.WebGL);
-
+#else
+			PlayerSettings.WebGL.template = "WebXR";
+#endif
 			BuildPipeline.BuildPlayer(new BuildPlayerOptions
 			{
 				target = BuildTarget.WebGL,
