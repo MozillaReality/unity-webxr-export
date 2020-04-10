@@ -152,7 +152,6 @@
         } else if (thisXRMananger.inlineSession) {
           return thisXRMananger.inlineSession.requestAnimationFrame((time, xrFrame) =>
           {
-            thisXRMananger.animate(time, xrFrame);
             if (func) {
               func(time);
             }
@@ -300,25 +299,23 @@
     session.requestReferenceSpace(refSpaceType).then((refSpace) => {
       if (session.isImmersive) {
         this.vrImmersiveRefSpace = refSpace;
+        // Inform the session that we're ready to begin drawing.
+        this.gameInstance.Module.InternalBrowser.requestAnimationFrame(this.rAFCB);
       } else {
         this.xrInlineRefSpace = refSpace;
       }
-      // Inform the session that we're ready to begin drawing.
-      this.gameInstance.Module.InternalBrowser.requestAnimationFrame(this.rAFCB);
     });
   }
 
   XRManager.prototype.animate = function (t, frame) {
     let session = frame.session;
 
-    if (!session)
+    if (!session && !session.isImmersive)
     {
       return;
     }
     
-    let refSpace = session.isImmersive ?
-                     this.vrImmersiveRefSpace :
-                     this.xrInlineRefSpace;
+    let refSpace = this.vrImmersiveRefSpace;
 
     let pose = frame.getViewerPose(refSpace);
     if (!pose) {
@@ -326,18 +323,11 @@
     }
 
     let glLayer = session.renderState.baseLayer;
-    
-    // It might be redundent to clear the framebuffer in Inline Session
-    // if we anyway use Unity's rendering pipeline.
-    // For now we do this also in Inline Session.
+    this.canvas.width = glLayer.framebufferWidth;
+    this.canvas.height = glLayer.framebufferHeight;
+
     this.ctx.bindFramebuffer(this.ctx.FRAMEBUFFER, glLayer.framebuffer);
     this.ctx.clear(this.ctx.COLOR_BUFFER_BIT | this.ctx.DEPTH_BUFFER_BIT);
-    
-    if (!session.isImmersive)
-    {
-      // Don't need to check controllers and views in Inline Session.
-      return;
-    }
     
     var xrData = this.xrData;
 
