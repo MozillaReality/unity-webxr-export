@@ -200,7 +200,7 @@
           this.onSessionStarted(session);
         });
       }
-    }
+    });
   }
 
   XRManager.prototype.getGamepadAxes = function(gamepad) {
