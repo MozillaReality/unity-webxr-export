@@ -34,8 +34,6 @@
     this.vrImmersiveRefSpace = null;
     this.xrInlineRefSpace = null;
     this.rAFCB = null;
-    this.originalWidth = null;
-    this.originalHeight = null;
     this.init();
   }
 
@@ -55,8 +53,9 @@
   XRManager.prototype.resize = function () {
     if (!this.canvas) return;
 
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
+    // TODO: The webxr script is bound to the full window view css style, need to allow more styles
+    this.canvas.width = window.innerWidth * window.devicePixelRatio;
+    this.canvas.height = window.innerHeight * window.devicePixelRatio;
     this.gameContainer.style.transform = '';
   }
 
@@ -106,8 +105,8 @@
     this.gameInstance.SendMessage(this.unityObjectName, 'OnEndXR');
     this.isInVRSession = false;
     this.notifiedStartToUnity = false;
-    this.canvas.width = this.originalWidth;
-    this.canvas.height = this.originalHeight;
+    this.canvas.width = window.innerWidth * window.devicePixelRatio;
+    this.canvas.height = window.innerHeight * window.devicePixelRatio;
   }
 
   XRManager.prototype.toggleVR = function () {
@@ -152,6 +151,7 @@
         } else if (thisXRMananger.inlineSession) {
           return thisXRMananger.inlineSession.requestAnimationFrame((time, xrFrame) =>
           {
+            thisXRMananger.animate(time, xrFrame);
             if (func) {
               func(time);
             }
@@ -160,6 +160,24 @@
           window.requestAnimationFrame(func);
         }
       };
+      
+      // When using Unity's URP, it tends to call bindFrameBuffer with null frameBufferObject.
+      // In WebGL it means to draw to the canvas FBO.
+      // Some platforms consider that when in XR and draw to the XRWebGLLayer FBO when getting null FBO,
+      // others needs to explicitly get the XRWebGLLayer FBO instead of null.
+      this.ctx.bindFramebuffer = (oldBindFramebuffer => function bindFramebuffer(target, fbo) {
+        if (!fbo) {
+          if (thisXRMananger.vrSession && thisXRMananger.isInVRSession) {
+            if (thisXRMananger.vrSession.renderState.baseLayer) {
+              fbo = thisXRMananger.vrSession.renderState.baseLayer.framebuffer;
+            }
+          } else if (thisXRMananger.inlineSession &&
+                     thisXRMananger.inlineSession.renderState.baseLayer) {
+            fbo = thisXRMananger.inlineSession.renderState.baseLayer.framebuffer;
+          }
+        }
+        return oldBindFramebuffer.call(this, target, fbo);
+      })(this.ctx.bindFramebuffer);
     }
   }
 
@@ -192,9 +210,14 @@
       })
     );
     
-    navigator.xr.requestSession('inline').then((session) => {
-      this.inlineSession = session;
-      this.onSessionStarted(session);
+    
+    navigator.xr.isSessionSupported('inline').then((supported) => {
+      if (supported) {
+        navigator.xr.requestSession('inline').then((session) => {
+          this.inlineSession = session;
+          this.onSessionStarted(session);
+        });
+      }
     });
   }
 
@@ -223,24 +246,25 @@
     for (let source of frame.session.inputSources) {
       if (source.gripSpace && source.gamepad) {
         let sourcePose = frame.getPose(source.gripSpace, refSpace);
+        if (sourcePose) {
+          var position = sourcePose.transform.position;
+          var orientation = sourcePose.transform.orientation;
 
-        var position = sourcePose.transform.position;
-        var orientation = sourcePose.transform.orientation;
-
-        // Structure of this corresponds with WebXRControllerData.cs
-        gamepads.push({
-          id: source.gamepad.id,
-          index: source.gamepad.index,
-          hand: source.handedness,
-          buttons: this.getGamepadButtons(source.gamepad),
-          axes: this.getGamepadAxes(source.gamepad),
-          hasOrientation: true,
-          hasPosition: true,
-          orientation: this.GLQuaternionToUnity([orientation.x, orientation.y, orientation.z, orientation.w]),
-          position: this.GLVec3ToUnity([position.x, position.y, position.z]),
-          linearAcceleration: [0, 0, 0],
-          linearVelocity: [0, 0, 0]
-        });
+          // Structure of this corresponds with WebXRControllerData.cs
+          gamepads.push({
+            id: source.gamepad.id,
+            index: source.gamepad.index,
+            hand: source.handedness,
+            buttons: this.getGamepadButtons(source.gamepad),
+            axes: this.getGamepadAxes(source.gamepad),
+            hasOrientation: true,
+            hasPosition: true,
+            orientation: this.GLQuaternionToUnity([orientation.x, orientation.y, orientation.z, orientation.w]),
+            position: this.GLVec3ToUnity([position.x, position.y, position.z]),
+            linearAcceleration: [0, 0, 0],
+            linearVelocity: [0, 0, 0]
+          });
+        }
       }
      }
     return gamepads;
@@ -290,8 +314,6 @@
     let refSpaceType = 'viewer';
     if (session.isImmersive){
       refSpaceType = 'local-floor';
-      this.originalWidth = this.canvas.width;
-      this.originalHeight = this.canvas.height;
       this.canvas.width = glLayer.framebufferWidth;
       this.canvas.height = glLayer.framebufferHeight;
     }
@@ -310,7 +332,23 @@
   XRManager.prototype.animate = function (t, frame) {
     let session = frame.session;
 
-    if (!session && !session.isImmersive)
+    if (!session)
+    {
+      return;
+    }
+
+    let glLayer = session.renderState.baseLayer;
+    if (this.canvas.width != glLayer.framebufferWidth ||
+        this.canvas.height != glLayer.framebufferHeight)
+    {
+      this.canvas.width = glLayer.framebufferWidth;
+      this.canvas.height = glLayer.framebufferHeight;
+    }
+
+    this.ctx.bindFramebuffer(this.ctx.FRAMEBUFFER, glLayer.framebuffer);
+    this.ctx.clear(this.ctx.COLOR_BUFFER_BIT | this.ctx.DEPTH_BUFFER_BIT);
+    
+    if (!session.isImmersive)
     {
       return;
     }
@@ -321,13 +359,6 @@
     if (!pose) {
       return;
     }
-
-    let glLayer = session.renderState.baseLayer;
-    this.canvas.width = glLayer.framebufferWidth;
-    this.canvas.height = glLayer.framebufferHeight;
-
-    this.ctx.bindFramebuffer(this.ctx.FRAMEBUFFER, glLayer.framebuffer);
-    this.ctx.clear(this.ctx.COLOR_BUFFER_BIT | this.ctx.DEPTH_BUFFER_BIT);
     
     var xrData = this.xrData;
 
