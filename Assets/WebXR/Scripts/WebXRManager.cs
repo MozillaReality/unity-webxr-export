@@ -168,6 +168,8 @@ namespace WebXR
             _capabilities = capabilities;
             if (!capabilities.supportsImmersiveVR)
                 WebXRUI.displayXRElementId("novr");
+            else if (!capabilities.isSecureContext)
+                WebXRUI.displayXRElementId("nosecure");
 #endif
 
             if (OnXRCapabilitiesUpdate != null)

@@ -46,7 +46,7 @@
 
     navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
       this.isVRSupported = supported;
-      this.enterXRButton.dataset.enabled = supported;
+      this.enterXRButton.dataset.enabled = supported && window.isSecureContext;
     });
   }
 
@@ -197,14 +197,15 @@
     var hasExternalDisplay = false;
 
     this.setGameInstance(gameInstance);
-    
-    this.enterXRButton.disabled = !this.isVRSupported;
+
+    this.enterXRButton.disabled = !this.isVRSupported || !window.isSecureContext;
 
     this.gameInstance.SendMessage(
       this.unityObjectName, 'OnXRCapabilities',
       JSON.stringify({
         canPresent: canPresent,
         hasPosition: hasPosition,
+        isSecureContext: window.isSecureContext,
         hasExternalDisplay: hasExternalDisplay,
         supportsImmersiveVR: this.isVRSupported,
       })
