@@ -216,6 +216,11 @@
       })
     );
 
+    if (!window.isSecureContext) {
+      this.inlineSession = false;
+      return;
+    }
+
     navigator.xr.isSessionSupported('inline').then((supported) => {
       if (supported) {
         navigator.xr.requestSession('inline').then((session) => {
