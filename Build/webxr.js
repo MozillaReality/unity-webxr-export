@@ -44,9 +44,14 @@
 
     this.attachEventListeners();
 
+    if (!window.isSecureContext) {
+      this.isVRSupported = false;
+      this.enterXRButton.dataset.enabled = false;
+      return;
+    }
     navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
       this.isVRSupported = supported;
-      this.enterXRButton.dataset.enabled = supported && window.isSecureContext;
+      this.enterXRButton.dataset.enabled = supported;
     });
   }
 
@@ -210,8 +215,7 @@
         supportsImmersiveVR: this.isVRSupported,
       })
     );
-    
-    
+
     navigator.xr.isSessionSupported('inline').then((supported) => {
       if (supported) {
         navigator.xr.requestSession('inline').then((session) => {
