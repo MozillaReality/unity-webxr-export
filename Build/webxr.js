@@ -44,6 +44,11 @@
 
     this.attachEventListeners();
 
+    if (!window.isSecureContext) {
+      this.isVRSupported = false;
+      this.enterXRButton.dataset.enabled = false;
+      return;
+    }
     navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
       this.isVRSupported = supported;
       this.enterXRButton.dataset.enabled = supported;
@@ -197,7 +202,7 @@
     var hasExternalDisplay = false;
 
     this.setGameInstance(gameInstance);
-    
+
     this.enterXRButton.disabled = !this.isVRSupported;
 
     this.gameInstance.SendMessage(
@@ -205,12 +210,17 @@
       JSON.stringify({
         canPresent: canPresent,
         hasPosition: hasPosition,
+        isSecureContext: window.isSecureContext,
         hasExternalDisplay: hasExternalDisplay,
         supportsImmersiveVR: this.isVRSupported,
       })
     );
-    
-    
+
+    if (!window.isSecureContext) {
+      this.inlineSession = false;
+      return;
+    }
+
     navigator.xr.isSessionSupported('inline').then((supported) => {
       if (supported) {
         navigator.xr.requestSession('inline').then((session) => {

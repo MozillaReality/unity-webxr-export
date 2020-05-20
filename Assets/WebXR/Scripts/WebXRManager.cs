@@ -166,7 +166,9 @@ namespace WebXR
             // Nothing to do
 #elif UNITY_WEBGL
             _capabilities = capabilities;
-            if (!capabilities.supportsImmersiveVR)
+            if (!capabilities.isSecureContext)
+                WebXRUI.displayXRElementId("nosecure");
+            else if (!capabilities.supportsImmersiveVR)
                 WebXRUI.displayXRElementId("novr");
 #endif
 
