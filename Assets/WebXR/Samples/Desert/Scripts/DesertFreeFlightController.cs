@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using WebXR;
 
+[RequireComponent(typeof(Camera))]
 public class DesertFreeFlightController : MonoBehaviour {
     [Tooltip("Enable/disable rotation control. For use in Unity editor only.")]
     public bool rotationEnabled = true;
@@ -27,11 +28,17 @@ public class DesertFreeFlightController : MonoBehaviour {
 
     Quaternion originalRotation;
 
+    private Camera attachedCamera;
+    private Vector3 axis;
+    private Vector3 axisLastFrame;
+    private Vector3 axisDelta;
+
     void Start()
     {
         WebXRManager.Instance.OnXRChange += onXRChange;
         WebXRManager.Instance.OnXRCapabilitiesUpdate += onXRCapabilitiesUpdate;
         originalRotation = transform.localRotation;
+        attachedCamera = GetComponent<Camera>();
     }
 
     private void onXRChange(WebXRState state)
@@ -61,11 +68,20 @@ public class DesertFreeFlightController : MonoBehaviour {
             transform.Translate(x, 0, z);
         }
 
-        if (rotationEnabled && Input.GetMouseButton(0))
+        if (rotationEnabled)
         {
+          if (Input.GetMouseButtonDown(0))
+          {
+            axisLastFrame = attachedCamera.ScreenToViewportPoint(Input.mousePosition);
+          }
+          if (Input.GetMouseButton(0))
+          {
+            axis = attachedCamera.ScreenToViewportPoint(Input.mousePosition);
+            axisDelta = (axisLastFrame - axis) * 90f;
+            axisLastFrame = axis;
 
-            rotationX += Input.GetAxis ("Mouse X") * mouseSensitivity;
-            rotationY += Input.GetAxis ("Mouse Y") * mouseSensitivity;
+            rotationX += axisDelta.x * mouseSensitivity;
+            rotationY += axisDelta.y * mouseSensitivity;
 
             rotationX = ClampAngle (rotationX, minimumX, maximumX);
             rotationY = ClampAngle (rotationY, minimumY, maximumY);
@@ -74,6 +90,7 @@ public class DesertFreeFlightController : MonoBehaviour {
             Quaternion yQuaternion = Quaternion.AngleAxis (rotationY, Vector3.left);
 
             transform.localRotation = originalRotation * xQuaternion * yQuaternion;
+          }
         }
     }
 
