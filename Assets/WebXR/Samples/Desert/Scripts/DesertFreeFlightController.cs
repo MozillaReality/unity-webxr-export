@@ -70,27 +70,27 @@ public class DesertFreeFlightController : MonoBehaviour {
 
         if (rotationEnabled)
         {
-          if (Input.GetMouseButtonDown(0))
-          {
-            axisLastFrame = attachedCamera.ScreenToViewportPoint(Input.mousePosition);
-          }
-          if (Input.GetMouseButton(0))
-          {
-            axis = attachedCamera.ScreenToViewportPoint(Input.mousePosition);
-            axisDelta = (axisLastFrame - axis) * 90f;
-            axisLastFrame = axis;
+            if (Input.GetMouseButtonDown(0))
+            {
+                axisLastFrame = attachedCamera.ScreenToViewportPoint(Input.mousePosition);
+            }
+            if (Input.GetMouseButton(0))
+            {
+                axis = attachedCamera.ScreenToViewportPoint(Input.mousePosition);
+                axisDelta = (axisLastFrame - axis) * 90f;
+                axisLastFrame = axis;
 
-            rotationX += axisDelta.x * mouseSensitivity;
-            rotationY += axisDelta.y * mouseSensitivity;
+                rotationX += axisDelta.x * mouseSensitivity;
+                rotationY += axisDelta.y * mouseSensitivity;
 
-            rotationX = ClampAngle (rotationX, minimumX, maximumX);
-            rotationY = ClampAngle (rotationY, minimumY, maximumY);
+                rotationX = ClampAngle (rotationX, minimumX, maximumX);
+                rotationY = ClampAngle (rotationY, minimumY, maximumY);
 
-            Quaternion xQuaternion = Quaternion.AngleAxis (rotationX, Vector3.up);
-            Quaternion yQuaternion = Quaternion.AngleAxis (rotationY, Vector3.left);
+                Quaternion xQuaternion = Quaternion.AngleAxis (rotationX, Vector3.up);
+                Quaternion yQuaternion = Quaternion.AngleAxis (rotationY, Vector3.left);
 
-            transform.localRotation = originalRotation * xQuaternion * yQuaternion;
-          }
+                transform.localRotation = originalRotation * xQuaternion * yQuaternion;
+            }
         }
     }
 
