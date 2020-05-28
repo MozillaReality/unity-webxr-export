@@ -268,11 +268,36 @@ namespace WebXR
             return controllerPosition;
         }
 
+        bool xr_inited = false;
+
+        //public GameObject Head;
+        
+        private List<XRNodeState> mNodeStates = new List<XRNodeState>();
+        private Vector3 mHeadPos;
+        private Quaternion mHeadRot;
+        private Vector3 mHandPos;
+        private Quaternion mHandRot;
+        //roblkw - mod
+        void InitXR()
+        {
+            xr_inited = true;
+            List<XRInputSubsystem> subsystems = new List<XRInputSubsystem>();
+            SubsystemManager.GetInstances<XRInputSubsystem>(subsystems);
+            for (int i = 0; i < subsystems.Count; i++)
+            {
+                subsystems[i].TrySetTrackingOriginMode(TrackingOriginModeFlags.Floor);
+            }
+        }
         void Update()
         {
+            #if !UNITY_EDITOR
+                return;
+            #endif
             // Use Unity XR Input when enabled. When using WebXR, updates are performed onControllerUpdate.
-            if (!XRDevice.isPresent) return;
-            
+            //if (!XRDevice.isPresent) return;
+
+            if (!xr_inited) InitXR();
+
             SetVisible(true);
 
             if (this.hand == WebXRControllerHand.LEFT)
@@ -281,18 +306,47 @@ namespace WebXR
             if (this.hand == WebXRControllerHand.RIGHT)
                 handNode = XRNode.RightHand;
 
+            //roblkw mod
+            InputTracking.GetNodeStates(mNodeStates);
+
+            foreach (XRNodeState nodeState in mNodeStates)
+            {
+                switch (nodeState.nodeType)
+                {
+                    case XRNode.Head:
+                        nodeState.TryGetPosition(out mHeadPos);
+                        nodeState.TryGetRotation(out mHeadRot);
+                        break;
+                    case XRNode.LeftHand:
+                        if (this.hand == WebXRControllerHand.LEFT) { 
+                            nodeState.TryGetPosition(out mHandPos);
+                            nodeState.TryGetRotation(out mHandRot);
+                        }
+                        break;
+                    case XRNode.RightHand:
+                        if (this.hand == WebXRControllerHand.RIGHT)
+                        {
+                            nodeState.TryGetPosition(out mHandPos);
+                            nodeState.TryGetRotation(out mHandRot);
+                        }
+                        break;
+
+                }
+            }
+
+
             if (this.simulate3dof)
             {
                 _t.localPosition = applyArmModel(
-                    InputTracking.GetLocalPosition(XRNode.Head), // we use head position as origin
-                    InputTracking.GetLocalRotation(handNode),
-                    InputTracking.GetLocalRotation(XRNode.Head));
-                _t.localRotation = InputTracking.GetLocalRotation(handNode);
+                    mHeadPos,//InputTracking.GetLocalPosition(XRNode.Head), // we use head position as origin
+                    mHandRot,// InputTracking.GetLocalRotation(handNode);
+                    mHeadRot);//InputTracking.GetLocalRotation(XRNode.Head));
+                _t.localRotation = mHandRot; // InputTracking.GetLocalRotation(handNode);
             }
             else
             {
-                _t.localPosition = InputTracking.GetLocalPosition(handNode);
-                _t.localRotation = InputTracking.GetLocalRotation(handNode);
+                _t.localPosition = mHandPos;// InputTracking.GetLocalPosition(handNode);
+                _t.localRotation = mHandRot;// InputTracking.GetLocalRotation(handNode);
             }
 
             foreach (WebXRControllerInput input in inputMap.inputs)

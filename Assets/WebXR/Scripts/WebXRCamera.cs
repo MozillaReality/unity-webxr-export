@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
+using UnityEngine.XR;
+using System.Collections.Generic;
 
 namespace WebXR
 {
@@ -79,5 +81,31 @@ namespace WebXR
                 cameraR.projectionMatrix = rightProjectionMatrix;
             }
         }
+        private void Update()
+        {
+            #if !UNITY_EDITOR
+                        return;
+            #endif
+            InputTracking.GetNodeStates(mNodeStates);
+
+            foreach (XRNodeState nodeState in mNodeStates)
+            {
+                switch (nodeState.nodeType)
+                {
+                    case XRNode.Head:
+                        nodeState.TryGetPosition(out mHeadPos);
+                        nodeState.TryGetRotation(out mHeadRot);
+                        break;
+                   
+                }
+            }
+            Head.transform.localPosition = mHeadPos;
+            Head.transform.localRotation = mHeadRot.normalized;
+        }
+        public GameObject Head;
+
+        private List<XRNodeState> mNodeStates = new List<XRNodeState>();
+        private Vector3 mHeadPos;
+        private Quaternion mHeadRot;
     }
 }
