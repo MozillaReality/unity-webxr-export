@@ -270,14 +270,8 @@ namespace WebXR
 
         bool xr_inited = false;
 
-        //public GameObject Head;
         
-        private List<XRNodeState> mNodeStates = new List<XRNodeState>();
-        private Vector3 mHeadPos;
-        private Quaternion mHeadRot;
-        private Vector3 mHandPos;
-        private Quaternion mHandRot;
-        //roblkw - mod
+        
         void InitXR()
         {
             xr_inited = true;
@@ -290,15 +284,21 @@ namespace WebXR
         }
         void Update()
         {
-            #if !UNITY_EDITOR
-                return;
-            #endif
             // Use Unity XR Input when enabled. When using WebXR, updates are performed onControllerUpdate.
-            //if (!XRDevice.isPresent) return;
+            List<InputDevice> devices = new List<InputDevice>();
+            InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, devices);
+            bool XRisPresent = devices.Count > 0;
+            if (!XRisPresent) return;
 
             if (!xr_inited) InitXR();
 
             SetVisible(true);
+
+            List<XRNodeState> mNodeStates = new List<XRNodeState>();
+            Vector3 mHeadPos = Vector3.zero;
+            Quaternion mHeadRot = Quaternion.identity;
+            Vector3 mHandPos = Vector3.zero;
+            Quaternion mHandRot = Quaternion.identity;
 
             if (this.hand == WebXRControllerHand.LEFT)
                 handNode = XRNode.LeftHand;
@@ -338,15 +338,15 @@ namespace WebXR
             if (this.simulate3dof)
             {
                 _t.localPosition = applyArmModel(
-                    mHeadPos,//InputTracking.GetLocalPosition(XRNode.Head), // we use head position as origin
-                    mHandRot,// InputTracking.GetLocalRotation(handNode);
-                    mHeadRot);//InputTracking.GetLocalRotation(XRNode.Head));
-                _t.localRotation = mHandRot; // InputTracking.GetLocalRotation(handNode);
+                    mHeadPos, // we use head position as origin
+                    mHandRot,
+                    mHeadRot);
+                _t.localRotation = mHandRot;
             }
             else
             {
-                _t.localPosition = mHandPos;// InputTracking.GetLocalPosition(handNode);
-                _t.localRotation = mHandRot;// InputTracking.GetLocalRotation(handNode);
+                _t.localPosition = mHandPos;
+                _t.localRotation = mHandRot;
             }
 
             foreach (WebXRControllerInput input in inputMap.inputs)

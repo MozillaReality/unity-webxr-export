@@ -33,11 +33,11 @@ namespace WebXR
 
             cameraMain.transform.localPosition = new Vector3(0, WebXRManager.Instance.DefaultHeight, 0);
 
-#if UNITY_EDITOR
-			// No editor specific funtionality
-#elif UNITY_WEBGL
-			postRenderCoroutine = StartCoroutine(endOfFrame());
-#endif
+            #if UNITY_EDITOR
+			            // No editor specific funtionality
+            #elif UNITY_WEBGL
+			            postRenderCoroutine = StartCoroutine(endOfFrame());
+            #endif
         }
 
         private void OnDisable()
@@ -81,31 +81,34 @@ namespace WebXR
                 cameraR.projectionMatrix = rightProjectionMatrix;
             }
         }
+
+        //Update Camera position according to Unity XR, if not using WebGL
         private void Update()
         {
-            #if !UNITY_EDITOR
-                        return;
-            #endif
-            InputTracking.GetNodeStates(mNodeStates);
+            List<InputDevice> devices = new List<InputDevice>();
+            InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, devices);
+            bool XRisPresent = devices.Count > 0;
+            if (XRisPresent) { 
+                List<XRNodeState> mNodeStates = new List<XRNodeState>();
+                InputTracking.GetNodeStates(mNodeStates);
 
-            foreach (XRNodeState nodeState in mNodeStates)
-            {
-                switch (nodeState.nodeType)
+                Vector3 mHeadPos = Vector3.zero;
+                Quaternion mHeadRot = Quaternion.identity;
+                foreach (XRNodeState nodeState in mNodeStates)
                 {
-                    case XRNode.Head:
-                        nodeState.TryGetPosition(out mHeadPos);
-                        nodeState.TryGetRotation(out mHeadRot);
-                        break;
+                    switch (nodeState.nodeType)
+                    {
+                        case XRNode.Head:
+                            nodeState.TryGetPosition(out mHeadPos);
+                            nodeState.TryGetRotation(out mHeadRot);
+                            break;
                    
+                    }
                 }
+                cameraMain.transform.localPosition = mHeadPos;
+                cameraMain.transform.localRotation = mHeadRot.normalized;
             }
-            Head.transform.localPosition = mHeadPos;
-            Head.transform.localRotation = mHeadRot.normalized;
         }
-        public GameObject Head;
-
-        private List<XRNodeState> mNodeStates = new List<XRNodeState>();
-        private Vector3 mHeadPos;
-        private Quaternion mHeadRot;
     }
+
 }
