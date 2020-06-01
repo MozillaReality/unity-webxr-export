@@ -109,6 +109,8 @@ namespace WebXR
                 cameraMain.transform.localRotation = mHeadRot.normalized;
             }
         }
+	#endif
+	
     }
-#endif
+
 }
