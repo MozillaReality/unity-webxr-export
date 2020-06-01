@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/WebXR/Samples/Reticle/reticleExample.unity
+    guid: 721ebd025e210a142a140fca169477d0
+  - enabled: 1
     path: Assets/WebXR/Samples/Desert/WebXR.unity
     guid: 62764e63b9bc64baaaf251014195be42
   m_configObjects: {}
