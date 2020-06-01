@@ -211,8 +211,7 @@ namespace WebXR
                 position = sitStand.MultiplyPoint(position);
             }
 
-            _t.localPosition = position;
-            _t.localRotation = rotation;
+            _t.SetPositionAndRotation(position, rotation);
 
             UpdateButtons(buttonValues);
             axes = axesValues;
@@ -283,16 +282,15 @@ namespace WebXR
 
             if (this.simulate3dof)
             {
-                _t.localPosition = applyArmModel(
+                _t.SetPositionAndRotation(applyArmModel(
                     InputTracking.GetLocalPosition(XRNode.Head), // we use head position as origin
                     InputTracking.GetLocalRotation(handNode),
-                    InputTracking.GetLocalRotation(XRNode.Head));
-                _t.localRotation = InputTracking.GetLocalRotation(handNode);
+                    InputTracking.GetLocalRotation(XRNode.Head)
+                ), InputTracking.GetLocalRotation(handNode));
             }
             else
             {
-                _t.localPosition = InputTracking.GetLocalPosition(handNode);
-                _t.localRotation = InputTracking.GetLocalRotation(handNode);
+                _t.SetPositionAndRotation(InputTracking.GetLocalPosition(handNode), InputTracking.GetLocalRotation(handNode));
             }
 
             foreach (WebXRControllerInput input in inputMap.inputs)
