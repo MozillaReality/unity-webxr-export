@@ -36,7 +36,7 @@ namespace WebXR
 #if UNITY_EDITOR
 			// No editor specific funtionality
 #elif UNITY_WEBGL
-			 postRenderCoroutine = StartCoroutine(endOfFrame());
+			postRenderCoroutine = StartCoroutine(endOfFrame());
 #endif
         }
 
