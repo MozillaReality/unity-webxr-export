@@ -33,11 +33,11 @@ namespace WebXR
 
             cameraMain.transform.localPosition = new Vector3(0, WebXRManager.Instance.DefaultHeight, 0);
 
-            #if UNITY_EDITOR
-			            // No editor specific funtionality
-            #elif UNITY_WEBGL
-			            postRenderCoroutine = StartCoroutine(endOfFrame());
-            #endif
+#if UNITY_EDITOR
+			// No editor specific funtionality
+#elif UNITY_WEBGL
+			 postRenderCoroutine = StartCoroutine(endOfFrame());
+#endif
         }
 
         private void OnDisable()
@@ -81,7 +81,7 @@ namespace WebXR
                 cameraR.projectionMatrix = rightProjectionMatrix;
             }
         }
-
+#if UNITY_EDITOR || !UNITY_WEBGL
         //Update Camera position according to Unity XR, if not using WebGL
         private void Update()
         {
@@ -110,5 +110,5 @@ namespace WebXR
             }
         }
     }
-
+#endif
 }
