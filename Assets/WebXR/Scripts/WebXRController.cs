@@ -271,7 +271,7 @@ namespace WebXR
         bool xr_inited = false;
 
         
-        
+ #if UNITY_EDITOR || !UNITY_WEBGL               
         void InitXR()
         {
             xr_inited = true;
@@ -282,6 +282,7 @@ namespace WebXR
                 subsystems[i].TrySetTrackingOriginMode(TrackingOriginModeFlags.Floor);
             }
         }
+        
         void Update()
         {
             // Use Unity XR Input when enabled. When using WebXR, updates are performed onControllerUpdate.
@@ -305,8 +306,7 @@ namespace WebXR
 
             if (this.hand == WebXRControllerHand.RIGHT)
                 handNode = XRNode.RightHand;
-
-            //roblkw mod
+                
             InputTracking.GetNodeStates(mNodeStates);
 
             foreach (XRNodeState nodeState in mNodeStates)
@@ -360,7 +360,7 @@ namespace WebXR
                 }
             }
         }
-
+#endif
         private void Awake()
         {
             _t = transform;
