@@ -268,31 +268,85 @@ namespace WebXR
             return controllerPosition;
         }
 
+        bool xr_inited = false;
+
+        
+ #if UNITY_EDITOR || !UNITY_WEBGL               
+        void InitXR()
+        {
+            xr_inited = true;
+            List<XRInputSubsystem> subsystems = new List<XRInputSubsystem>();
+            SubsystemManager.GetInstances<XRInputSubsystem>(subsystems);
+            for (int i = 0; i < subsystems.Count; i++)
+            {
+                subsystems[i].TrySetTrackingOriginMode(TrackingOriginModeFlags.Floor);
+            }
+        }
+        
         void Update()
         {
             // Use Unity XR Input when enabled. When using WebXR, updates are performed onControllerUpdate.
-            if (!XRDevice.isPresent) return;
-            
+            List<InputDevice> devices = new List<InputDevice>();
+            InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, devices);
+            bool XRisPresent = devices.Count > 0;
+            if (!XRisPresent) return;
+
+            if (!xr_inited) InitXR();
+
             SetVisible(true);
+
+            List<XRNodeState> mNodeStates = new List<XRNodeState>();
+            Vector3 mHeadPos = Vector3.zero;
+            Quaternion mHeadRot = Quaternion.identity;
+            Vector3 mHandPos = Vector3.zero;
+            Quaternion mHandRot = Quaternion.identity;
 
             if (this.hand == WebXRControllerHand.LEFT)
                 handNode = XRNode.LeftHand;
 
             if (this.hand == WebXRControllerHand.RIGHT)
                 handNode = XRNode.RightHand;
+                
+            InputTracking.GetNodeStates(mNodeStates);
+
+            foreach (XRNodeState nodeState in mNodeStates)
+            {
+                switch (nodeState.nodeType)
+                {
+                    case XRNode.Head:
+                        nodeState.TryGetPosition(out mHeadPos);
+                        nodeState.TryGetRotation(out mHeadRot);
+                        break;
+                    case XRNode.LeftHand:
+                        if (this.hand == WebXRControllerHand.LEFT) { 
+                            nodeState.TryGetPosition(out mHandPos);
+                            nodeState.TryGetRotation(out mHandRot);
+                        }
+                        break;
+                    case XRNode.RightHand:
+                        if (this.hand == WebXRControllerHand.RIGHT)
+                        {
+                            nodeState.TryGetPosition(out mHandPos);
+                            nodeState.TryGetRotation(out mHandRot);
+                        }
+                        break;
+
+                }
+            }
+
 
             if (this.simulate3dof)
             {
                 _t.localPosition = applyArmModel(
-                    InputTracking.GetLocalPosition(XRNode.Head), // we use head position as origin
-                    InputTracking.GetLocalRotation(handNode),
-                    InputTracking.GetLocalRotation(XRNode.Head));
-                _t.localRotation = InputTracking.GetLocalRotation(handNode);
+                    mHeadPos, // we use head position as origin
+                    mHandRot,
+                    mHeadRot);
+                _t.localRotation = mHandRot;
             }
             else
             {
-                _t.localPosition = InputTracking.GetLocalPosition(handNode);
-                _t.localRotation = InputTracking.GetLocalRotation(handNode);
+                _t.localPosition = mHandPos;
+                _t.localRotation = mHandRot;
             }
 
             foreach (WebXRControllerInput input in inputMap.inputs)
@@ -306,7 +360,7 @@ namespace WebXR
                 }
             }
         }
-
+#endif
         private void Awake()
         {
             _t = transform;

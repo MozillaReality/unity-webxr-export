@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
+using UnityEngine.XR;
+using System.Collections.Generic;
 
 namespace WebXR
 {
@@ -79,5 +81,36 @@ namespace WebXR
                 cameraR.projectionMatrix = rightProjectionMatrix;
             }
         }
+#if UNITY_EDITOR || !UNITY_WEBGL
+        //Update Camera position according to Unity XR, if not using WebGL
+        private void Update()
+        {
+            List<InputDevice> devices = new List<InputDevice>();
+            InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, devices);
+            bool XRisPresent = devices.Count > 0;
+            if (XRisPresent) { 
+                List<XRNodeState> mNodeStates = new List<XRNodeState>();
+                InputTracking.GetNodeStates(mNodeStates);
+
+                Vector3 mHeadPos = Vector3.zero;
+                Quaternion mHeadRot = Quaternion.identity;
+                foreach (XRNodeState nodeState in mNodeStates)
+                {
+                    switch (nodeState.nodeType)
+                    {
+                        case XRNode.Head:
+                            nodeState.TryGetPosition(out mHeadPos);
+                            nodeState.TryGetRotation(out mHeadRot);
+                            break;
+                   
+                    }
+                }
+                cameraMain.transform.localPosition = mHeadPos;
+                cameraMain.transform.localRotation = mHeadRot.normalized;
+            }
+        }
+	#endif
+	
     }
+
 }
