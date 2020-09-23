@@ -115,6 +115,24 @@
   }
 
   XRManager.prototype.toggleVR = function () {
+    //fix for IOS 13+
+    if ( typeof( DeviceMotionEvent ) !== "undefined" && typeof( DeviceMotionEvent.requestPermission ) === "function" )  //means it is iphone or device that doesn't have vr permission
+    {
+    // (optional) Do something before API request prompt.
+    DeviceMotionEvent.requestPermission().then( response => {
+    // (optional) Do something after API prompt dismissed.
+    if ( response == "granted" ) {
+    }
+    else
+    {
+    alert( "DeviceMotionEvent not Granted, Please clear cache and try again" );
+    }
+    }).catch( e => {
+    console.error(e);
+    alert( " DeviceMotionEvent error "  + e);
+    } )
+    }
+    
     if (this.isVRSupported && this.isInVRSession && this.gameInstance) {
       this.exitSession();
     } else {
