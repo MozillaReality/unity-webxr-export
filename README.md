@@ -38,7 +38,7 @@ Assets for creating [WebXR](https://developer.mozilla.com/topics/mixed-reality/)
 
 WebXR has limited support at time of writing. See compatibility at [caniuse](https://caniuse.com/#feat=webxr) or on [MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API)
 
-A special build of Firefox, [Fiefox Reality](https://mixedreality.mozilla.org/firefox-reality/), has built-in support for WebXR.
+A special build of Firefox, [Firefox Reality](https://mixedreality.mozilla.org/firefox-reality/), has built-in support for WebXR.
 
 The polyfill will fall back to the old WebVR API if it is available.
 
@@ -47,8 +47,8 @@ The polyfill will fall back to the old WebVR API if it is available.
 | Desktop | Firefox | HTC VIVE, Oculus Rift, Windows Mixed Reality headsets (using Steam VR) | [Setup instructions](https://webvr.rocks/firefox) |
 | Desktop | Microsoft Edge | Windows Mixed Reality headsets | [Setup instructions](https://webvr.rocks/microsoft_edge) |
 | Desktop | Chrome Canary | HTC VIVE, Oculus Rift, Windows Mixed Reality headsets | Browser flags required. [Setup instructions](https://webvr.rocks/chrome) |
-| Mobile | Oculus Browser | Oculus Quest |
-| Mobile | Firefox Reality | Oculus Quest |
+| Mobile | Meta Quest Browser | Meta Quest |
+| Mobile | Firefox Reality | Meta Quest |
 
 ### Polyfilled WebXR
 
